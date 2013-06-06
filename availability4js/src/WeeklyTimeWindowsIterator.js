@@ -19,6 +19,8 @@ availability.WeeklyTimeWindowsIterator = availability.WeeklyTimeWindowsIterator 
 	
 	var self = {};
 	
+	cal = cal.clone(); // "cal" is modified later, this allows the caller to reuse his version of it
+	
 	var hasNext = true;
 	var timeWindows = [];
 	var isFirstAndLastSame = null;
@@ -137,18 +139,25 @@ availability.WeeklyTimeWindowsIterator = availability.WeeklyTimeWindowsIterator 
 	};
 	
 	/**
-	 * TODO: use binary search
 	 * @param minuteOfWeek   Integer
 	 * @return Integer index in timeWindows member
 	 */
 	function find(minuteOfWeek) {
-		for (var i = 0, l = timeWindows.length; i < l; ++i) {
-			if (endMinuteOfWeek(timeWindows[i]) > minuteOfWeek) {
-				return i;
+		// timeWindows are assumed to be sorted, so we can use binary search
+		var low = 0;
+		var high = timeWindows.length;
+		
+		while (low < high) {
+			var mid = (low + high) >>> 1;
+			var midValue = endMinuteOfWeek(timeWindows[mid]);
+			if (midValue <= minuteOfWeek) {
+				low = mid + 1;
+			} else {
+				high = mid;
 			}
 		}
 		
-		throw new Error("Unexpected weekly windows");
+		return low;
 	}
 	
 	/**
