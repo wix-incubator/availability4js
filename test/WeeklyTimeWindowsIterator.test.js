@@ -5,7 +5,7 @@ var StatusIteratorTester = require("./StatusIteratorTester.js");
 var Status = require("../src/Status.js");
 var timezoneJS = require('timezone-js');
 
-describe("DateTimeWindowsIterator", function() {
+describe("WeeklyTimeWindowsIterator", function() {
 	function createTester(params) {
 		params = params || {};
 		var cal = params.cal || null; // timezoneJS.Date
