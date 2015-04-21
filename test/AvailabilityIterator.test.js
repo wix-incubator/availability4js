@@ -1,12 +1,12 @@
 var should = require('chai').should();
-var TimeWindowsIterator = require("../src/TimeWindowsIterator.js");
+var AvailabilityIterator = require("../src/AvailabilityIterator.js");
 var StatusIteratorTester = require("./StatusIteratorTester.js");
 var WeeklyTimeWindow = require("../src/WeeklyTimeWindow.js");
 var CalendarAdvancer = require("./CalendarAdvancer.js");
 var Status = require("../src/Status.js");
 var timezoneJS = require('timezone-js');
 
-describe("TimeWindowsIterator", function() {
+describe("AvailabilityIterator", function() {
 	function createTester(params) {
 		params = params || {};
 		var cal = params.cal || null; // timezoneJS.Date
@@ -14,7 +14,7 @@ describe("TimeWindowsIterator", function() {
 		var exceptions = params.exceptions || null; // List<DateTimeWindow>
 
 		return new StatusIteratorTester({
-			it: new TimeWindowsIterator({
+			it: new AvailabilityIterator({
 				availability: {
 					weekly: weekly,
 					exceptions: exceptions
@@ -46,8 +46,6 @@ describe("TimeWindowsIterator", function() {
 		};
 	}
 	
-	/// TODO!!! this test fails
-	/*
     it ('returns a single status for a full weekly schedule with a redundant exception', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
 		
@@ -70,7 +68,6 @@ describe("TimeWindowsIterator", function() {
 		tester.assertLastStatus(Status.STATUS_AVAILABLE);
 		tester.assertDone();
     });
-	*/
 	
     it ('returns 3 statuses for a full weekly schedule with a non-redundant exception', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
