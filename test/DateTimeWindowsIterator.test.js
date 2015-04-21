@@ -41,7 +41,7 @@ describe("DateTimeWindowsIterator", function() {
 		};
 	}
 	
-    it ('should return a single unknown status when given null timeWindows', function() {
+    it ('returns a single unknown status when given null timeWindows', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
 		
 		var tester = createTester({
@@ -53,7 +53,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return a single unknown status when given no time windows', function() {
+    it ('returns a single unknown status when given no time windows', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
 		
 		var tester = createTester({
@@ -65,7 +65,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return two statuses when given a single time window and pointed to its start', function() {
+    it ('returns two statuses when given a single time window and pointed to its start', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
 		
 		var tester = createTester({
@@ -80,7 +80,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return three statuses when given a single time window and pointed to before its start', function() {
+    it ('returns three statuses when given a single time window and pointed to before its start', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
 		
 		var yesterday = cal.clone();
@@ -99,7 +99,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return the correct status when pointed to middle of window', function() {
+    it ('returns the correct status when pointed to middle of window', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
 		
 		var midWindow = cal.clone();
@@ -115,7 +115,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
     });
 	
-    it ('should return 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', function() {
+    it ('returns 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', function() {
 		var cal1 = new timezoneJS.Date(2010, 12-1, 11, 0, 0, 0, 0);
 		var cal2 = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
 		var cal3 = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);

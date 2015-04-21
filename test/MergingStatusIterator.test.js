@@ -21,7 +21,7 @@ describe("MergingStatusIterator", function() {
 		});
 	}
 	
-    it ('should return a single status when given a single status', function() {
+    it ('returns a single status when given a single status', function() {
 		var tester = createTester({
 			statuses: [
 				{
@@ -35,7 +35,7 @@ describe("MergingStatusIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return two statuses when given two different statuses', function() {
+    it ('returns two statuses when given two different statuses', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
 		
 		var tester = createTester({
@@ -57,7 +57,7 @@ describe("MergingStatusIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('should return a single status when given two same statuses', function() {
+    it ('returns a single status when given two same statuses', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
 		
 		var tester = createTester({
