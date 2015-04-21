@@ -1,4 +1,5 @@
 var should = require('chai').should();
+var CalendarAdvancer = require('./CalendarAdvancer.js');
 
 module.exports = function(params) {
 	params = params || {};
@@ -7,15 +8,7 @@ module.exports = function(params) {
 	
 	var self = {};
 	
-	function advance(cal, field, amount) {
-		switch (field) {
-			case  "day":
-				cal.setDate(cal.getDate() + amount);
-				break;
-			default:
-				throw new Error("Unsupported field: " + field);
-		}
-	}
+	var advancer = new CalendarAdvancer();
 	
 	/**
 	 * @param status   Status
@@ -27,7 +20,7 @@ module.exports = function(params) {
 		var actualStatus = it.next();
 		actualStatus.status.should.equal(status);
 		actualStatus.until.should.not.equal(null);
-		advance(cal, field, amount);
+		advancer.advance(cal, field, amount);
 		actualStatus.until.should.equal(cal.getTime());
 	};
 	

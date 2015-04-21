@@ -1,4 +1,5 @@
 var Status = require("./Status.js");
+var timezoneJS = require('timezone-js');
 
 module.exports = function(params) {
 	params = params || {};
