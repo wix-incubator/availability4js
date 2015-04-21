@@ -1,17 +1,6 @@
 var Status = require("./Status.js");
 var Period = require("./Period.js");
-
-var HOUR      = 60;
-var DAY       = HOUR * 24;
-var WEEK      = DAY  * 7;
-
-var SUNDAY    = DAY  * 0;
-var MONDAY    = DAY  * 1;
-var TUESDAY   = DAY  * 2;
-var WEDNESDAY = DAY  * 3;
-var THURSDAY  = DAY  * 4;
-var FRIDAY    = DAY  * 5;
-var SATURDAY  = DAY  * 6;
+var WeeklyTimeWindow = require("./WeeklyTimeWindow.js");
 
 module.exports = function(params) {
 	params = params || {};
@@ -29,7 +18,7 @@ module.exports = function(params) {
 	if (weekly.length === 0) {
 		timeWindows.push({
 			minuteOfWeek : 0,
-			durationMins : WEEK,
+			durationMins : WeeklyTimeWindow.WEEK,
 			status : Status.STATUS_AVAILABLE
 		});
 		isFirstAndLastSame = true;
@@ -51,10 +40,10 @@ module.exports = function(params) {
 			});
 			minuteOfWeek = endMinuteOfWeek(timeWindow);
 		}
-		if (minuteOfWeek < WEEK) {
+		if (minuteOfWeek < WeeklyTimeWindow.WEEK) {
 			timeWindows.push({
 				minuteOfWeek : minuteOfWeek,
-				durationMins : WEEK - minuteOfWeek,
+				durationMins : WeeklyTimeWindow.WEEK - minuteOfWeek,
 				status : Status.STATUS_UNAVAILABLE
 			});
 		}
@@ -92,7 +81,7 @@ module.exports = function(params) {
 		var minuteOfWeek = minutesFromStartOfWeek(cal);
 		var currentWindow = timeWindows[find(minuteOfWeek)];
 		var newMinuteOfWeek = endMinuteOfWeek(currentWindow);
-		if (newMinuteOfWeek === WEEK) {
+		if (newMinuteOfWeek === WeeklyTimeWindow.WEEK) {
 			newMinuteOfWeek = (isFirstAndLastSame ? endMinuteOfWeek(timeWindows[0]) : 0);
 		}
 		
@@ -111,7 +100,7 @@ module.exports = function(params) {
 	function advanceCalendar(oldMinuteOfWeek, newMinuteOfWeek) {
 		var minutesToAdvance = newMinuteOfWeek - oldMinuteOfWeek;
 		if (minutesToAdvance < 0) {
-			minutesToAdvance += WEEK;
+			minutesToAdvance += WeeklyTimeWindow.WEEK;
 		}
 		
 		// The craziness ahead is required to support DST (causing some dates to be invalid)
@@ -166,8 +155,8 @@ module.exports = function(params) {
 	 * @return Integer
 	 */
 	function minutesFromStartOfWeek(cal) {
-		return (cal.getDay() - SUNDAY) * DAY +
-			cal.getHours() * HOUR +
+		return (cal.getDay() - WeeklyTimeWindow.SUNDAY) * WeeklyTimeWindow.DAY +
+			cal.getHours() * WeeklyTimeWindow.HOUR +
 			cal.getMinutes();
 	}
 	
