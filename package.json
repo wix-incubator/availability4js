@@ -1,6 +1,6 @@
 {
-  "name": "availability4js",
-  "version": "0.0.1",
+  "name": "availability",
+  "version": "1.0.1",
   "description": "Wix Restaurants Availability Utils Module",
   "main": "index.js",
   "scripts": {
@@ -29,8 +29,7 @@
   },
   "devDependencies": {
     "chai": "^2.2.0",
-    "mocha": "^2.2.1",
-    "underscore": "^1.8.2"
+    "mocha": "^2.2.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
