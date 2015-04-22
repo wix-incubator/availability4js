@@ -82,7 +82,6 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns a single status when given a single "until forever" window and pointed to it', function() {
-		console.log("----------------------");
 		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
 		
 		var window = when(cal, "day", 1, true);
