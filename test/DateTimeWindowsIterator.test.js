@@ -65,6 +65,54 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
+    it ('returns two statuses when given a single "since forever" window and pointed in it', function() {
+		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		
+		var window = when(cal, "day", 1, true);
+		window.start = null;
+		
+		var tester = createTester({
+			cal: cal,
+			timeWindows: [ window ]
+		});
+		
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+		tester.assertLastStatus(Status.STATUS_UNKNOWN);
+		tester.assertDone();
+    });
+	
+    it ('returns a single status when given a single "until forever" window and pointed to it', function() {
+		console.log("----------------------");
+		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		
+		var window = when(cal, "day", 1, true);
+		window.end = null;
+		
+		var tester = createTester({
+			cal: cal,
+			timeWindows: [ window ]
+		});
+		
+		tester.assertLastStatus(Status.STATUS_AVAILABLE);
+		tester.assertDone();
+    });
+	
+    it ('returns a single status when given a single "since forever, until forever" window and pointed to it', function() {
+		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		
+		var tester = createTester({
+			cal: cal,
+			timeWindows: [{
+				start: null,
+				end: null,
+				available: true
+			}]
+		});
+		
+		tester.assertLastStatus(Status.STATUS_AVAILABLE);
+		tester.assertDone();
+    });
+	
     it ('returns two statuses when given a single time window and pointed to its start', function() {
 		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
 		

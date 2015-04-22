@@ -26,39 +26,73 @@ module.exports = function(params) {
 		}
 	}
 
+	var tz = cal.getTimezone();
+	
 	/**
 	 * @param date   availability.Date
 	 * @return Long
 	 */
 	function getTime(date) {
+		if (date === null) {
+			return null;
+		}
 		return new timezoneJS.Date(date.year, date.month - 1, date.day, date.hour, date.minute, tz).getTime();
 	}
-
-	var tz = cal.getTimezone();
-	var index = null;
-	if (timeWindows.length > 0) {
-		var timestamp = cal.getTime();
+	
+    function strictlyBefore(window1EndTs, window2StartTs) {
+        if ((window1EndTs == null) || (window2StartTs == null)) {
+            return false;
+        }
+        return (window1EndTs <= window2StartTs);
+    }
+	
+	function compare(timestamp, timeWindow) {
+		if (strictlyBefore(timestamp + 1000, getTime(timeWindow.start))) {
+			return -1;
+		} else if (strictlyBefore(getTime(timeWindow.end), timestamp)) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * @param timeWindows   List<DateTimeWindow>
+	 * @param timestamp     Long
+	 * @return Index
+	 */
+	function findInsertionIndex(timeWindows, timestamp) {
 		// TODO: use binary search
 		for (var i = 0, l = timeWindows.length; i < l; ++i) {
 			var timeWindow = timeWindows[i];
-			if (timestamp < getTime(timeWindow.start)) {
-				index = new Index(i, true);
-				break;
-			} else if (timestamp < getTime(timeWindow.end)) {
-				index = new Index(i, false);
-				break;
+			
+			var c = compare(timestamp, timeWindow);
+			if (c < 0) {
+				return new Index(i, true);
+			} if (c === 0) {
+				return new Index(i, false);
 			}
 		}
-		if (index === null) {
-			index = new Index(timeWindows.length, true);
-		}
+		return new Index(timeWindows.length, true);
+	}
+	
+	var index = null;
+	var lastWindowUntilForever = null;
+	if (timeWindows.length > 0) {
+		index = findInsertionIndex(timeWindows, cal.getTime());
+		lastWindowUntilForever = (timeWindows[timeWindows.length-1].end === null);
 	} else {
 		index = new Index(0, true);
+		lastWindowUntilForever = false;
 	}
 	
 	/** @return Boolean */
 	self.hasNext = function() {
-		return (index.isDummyBefore || (index.index < timeWindows.length));
+		if (index.index < timeWindows.length) {
+			return true;
+		}
+		
+		return (index.isDummyBefore && !lastWindowUntilForever);
 	};
 
 	/** @return Status */
