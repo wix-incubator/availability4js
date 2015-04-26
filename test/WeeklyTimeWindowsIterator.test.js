@@ -3,12 +3,12 @@ var WeeklyTimeWindowsIterator = require("../src/WeeklyTimeWindowsIterator.js");
 var WeeklyTimeWindow = require("../src/WeeklyTimeWindow.js");
 var StatusIteratorTester = require("./StatusIteratorTester.js");
 var Status = require("../src/Status.js");
-var timezoneJS = require('timezone-js');
+var moment = require('moment-timezone');
 
 describe("WeeklyTimeWindowsIterator", function() {
 	function createTester(params) {
 		params = params || {};
-		var cal = params.cal || null; // timezoneJS.Date
+		var cal = params.cal || null; // Moment with tz
 		var weekly = params.weekly || null; // List<DateTimeWindow>
 
 		return new StatusIteratorTester({
@@ -19,9 +19,11 @@ describe("WeeklyTimeWindowsIterator", function() {
 			cal: cal
 		});
 	}
+
+	var tz = "Asia/Jerusalem";
 	
     it ('returns a single available status when given null weekly', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -33,7 +35,7 @@ describe("WeeklyTimeWindowsIterator", function() {
     });
 	
     it ('returns a single available status when given empty weekly', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -45,7 +47,7 @@ describe("WeeklyTimeWindowsIterator", function() {
     });
 	
     it ('returns an infinite series of statuses for a Sunday-only schedule', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -64,7 +66,7 @@ describe("WeeklyTimeWindowsIterator", function() {
     });
 	
     it ('returns an infinite series of statuses for a Monday-only schedule', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -83,7 +85,7 @@ describe("WeeklyTimeWindowsIterator", function() {
     });
 	
     it ('returns the correct status when pointed to middle of window', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 12, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 12, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -99,7 +101,7 @@ describe("WeeklyTimeWindowsIterator", function() {
     });
 	
     it ('returns an infinite series of statuses for a Monday-Tuesday-Friday schedule', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,

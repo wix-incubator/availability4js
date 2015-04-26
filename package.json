@@ -24,14 +24,15 @@
     "url": "https://github.com/wix/availability4js/issues"
   },
   "homepage": "https://github.com/wix/availability4js",
-  "dependencies": {
-    "timezone-js": "^0.4.13"
-  },
   "devDependencies": {
     "chai": "^2.2.0",
     "mocha": "^2.2.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "moment": "^2.10.2",
+    "moment-timezone": "^0.3.1"
   }
 }

@@ -6,10 +6,10 @@ module.exports = function(params) {
 	self.advance = function(cal, field, amount) {
 		switch (field) {
 			case  "hour":
-				cal.setHours(cal.getHours() + amount);
+				cal.hour(cal.hour() + amount);
 				break;
 			case  "day":
-				cal.setDate(cal.getDate() + amount);
+				cal.date(cal.date() + amount);
 				break;
 			default:
 				throw new Error("Unsupported field: " + field);

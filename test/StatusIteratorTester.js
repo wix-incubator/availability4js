@@ -4,7 +4,7 @@ var CalendarAdvancer = require('./CalendarAdvancer.js');
 module.exports = function(params) {
 	params = params || {};
 	var it = params.it || null; // Iterator<Status>
-	var cal = params.cal || null; // timezoneJS.Date
+	var cal = params.cal || null; // Moment with tz
 	
 	var self = {};
 	
@@ -21,7 +21,7 @@ module.exports = function(params) {
 		actualStatus.status.should.equal(status);
 		actualStatus.until.should.not.equal(null);
 		advancer.advance(cal, field, amount);
-		actualStatus.until.should.equal(cal.getTime());
+		actualStatus.until.should.equal(cal.valueOf());
 	};
 	
 	/**

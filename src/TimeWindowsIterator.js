@@ -5,7 +5,7 @@ var Status = require("./Status.js");
 module.exports = function(params) {
 	params = params || {};
 	var av = params.availability || null; // availability.Availability
-	var cal = params.cal || null; // timezoneJS.Date
+	var cal = params.cal || null; // Moment with tz
 	
 	var self = {};
 	

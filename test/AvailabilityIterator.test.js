@@ -4,12 +4,12 @@ var StatusIteratorTester = require("./StatusIteratorTester.js");
 var WeeklyTimeWindow = require("../src/WeeklyTimeWindow.js");
 var CalendarAdvancer = require("./CalendarAdvancer.js");
 var Status = require("../src/Status.js");
-var timezoneJS = require('timezone-js');
+var moment = require('moment-timezone');
 
 describe("AvailabilityIterator", function() {
 	function createTester(params) {
 		params = params || {};
-		var cal = params.cal || null; // timezoneJS.Date
+		var cal = params.cal || null; // Moment with tz
 		var weekly = params.weekly || null; // List<WeeklyTimeWindow>
 		var exceptions = params.exceptions || null; // List<DateTimeWindow>
 
@@ -27,11 +27,11 @@ describe("AvailabilityIterator", function() {
 	
 	function toDate(cal) {
 		return {
-			year: cal.getFullYear(),
-			month: cal.getMonth() + 1,
-			day: cal.getDate(),
-			hour: cal.getHours(),
-			minute: cal.getMinutes()
+			year: cal.year(),
+			month: cal.month() + 1,
+			day: cal.date(),
+			hour: cal.hour(),
+			minute: cal.minute()
 		};
 	}
 	
@@ -45,9 +45,11 @@ describe("AvailabilityIterator", function() {
 			available: available
 		};
 	}
+
+	var tz = "Asia/Jerusalem";
 	
     it ('returns a single status for a full weekly schedule with a redundant exception', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var yesterday = cal.clone();
 		advancer.advance(yesterday, "day", -1);
@@ -70,7 +72,7 @@ describe("AvailabilityIterator", function() {
     });
 	
     it ('returns 3 statuses for a full weekly schedule with a non-redundant exception', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var yesterday = cal.clone();
 		advancer.advance(yesterday, "day", -1);
@@ -95,8 +97,8 @@ describe("AvailabilityIterator", function() {
     });
 	
     it ('returns a series of statuses for a complex weekly schedule with an exception', function() {
-		var cal1 = new timezoneJS.Date(2010, 12-1, 10, 0, 0, 0, 0);
-		var cal2 = new timezoneJS.Date(2010, 12-1, 14, 12, 0, 0, 0);
+		var cal1 = moment.tz([2010, 12-1, 10, 0, 0, 0, 0], tz);
+		var cal2 = moment.tz([2010, 12-1, 14, 12, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal1,

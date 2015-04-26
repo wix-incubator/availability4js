@@ -1,10 +1,10 @@
 var Status = require("./Status.js");
-var timezoneJS = require('timezone-js');
+var moment = require('moment-timezone');
 
 module.exports = function(params) {
 	params = params || {};
 	var timeWindows = params.timeWindows || []; // List<DateTimeWindow>
-	var cal = params.cal || null; // timezoneJS.Date
+	var cal = params.cal || null; // Moment with tz
 	
 	var self = {};
 	
@@ -26,7 +26,7 @@ module.exports = function(params) {
 		}
 	}
 
-	var tz = cal.getTimezone();
+	var tz = cal.tz();
 	
 	/**
 	 * @param date   availability.Date
@@ -36,7 +36,7 @@ module.exports = function(params) {
 		if (date === null) {
 			return null;
 		}
-		return new timezoneJS.Date(date.year, date.month - 1, date.day, date.hour, date.minute, tz).getTime();
+		return moment.tz([date.year, date.month - 1, date.day, date.hour, date.minute], tz).valueOf();
 	}
 	
     function strictlyBefore(window1EndTs, window2StartTs) {
@@ -79,7 +79,7 @@ module.exports = function(params) {
 	var index = null;
 	var lastWindowUntilForever = null;
 	if (timeWindows.length > 0) {
-		index = findInsertionIndex(timeWindows, cal.getTime());
+		index = findInsertionIndex(timeWindows, cal.valueOf());
 		lastWindowUntilForever = (timeWindows[timeWindows.length-1].end === null);
 	} else {
 		index = new Index(0, true);

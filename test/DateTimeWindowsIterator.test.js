@@ -3,12 +3,12 @@ var DateTimeWindowsIterator = require("../src/DateTimeWindowsIterator.js");
 var StatusIteratorTester = require("./StatusIteratorTester.js");
 var CalendarAdvancer = require("./CalendarAdvancer.js");
 var Status = require("../src/Status.js");
-var timezoneJS = require('timezone-js');
+var moment = require('moment-timezone');
 
 describe("DateTimeWindowsIterator", function() {
 	function createTester(params) {
 		params = params || {};
-		var cal = params.cal || null; // timezoneJS.Date
+		var cal = params.cal || null; // Moment with tz
 		var timeWindows = params.timeWindows || null; // List<DateTimeWindow>
 
 		return new StatusIteratorTester({
@@ -22,11 +22,11 @@ describe("DateTimeWindowsIterator", function() {
 	
 	function toDate(cal) {
 		return {
-			year: cal.getFullYear(),
-			month: cal.getMonth() + 1,
-			day: cal.getDate(),
-			hour: cal.getHours(),
-			minute: cal.getMinutes()
+			year: cal.year(),
+			month: cal.month() + 1,
+			day: cal.date(),
+			hour: cal.hour(),
+			minute: cal.minute()
 		};
 	}
 	
@@ -40,9 +40,11 @@ describe("DateTimeWindowsIterator", function() {
 			available: available
 		};
 	}
+
+	var tz = "Asia/Jerusalem";
 	
     it ('returns a single unknown status when given null timeWindows', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -54,7 +56,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns a single unknown status when given no time windows', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -66,7 +68,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns two statuses when given a single "since forever" window and pointed in it', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var window = when(cal, "day", 1, true);
 		window.start = null;
@@ -82,7 +84,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns a single status when given a single "until forever" window and pointed to it', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var window = when(cal, "day", 1, true);
 		window.end = null;
@@ -97,7 +99,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns a single status when given a single "since forever, until forever" window and pointed to it', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -113,7 +115,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns two statuses when given a single time window and pointed to its start', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 12, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
 			cal: cal,
@@ -128,7 +130,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns three statuses when given a single time window and pointed to before its start', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var yesterday = cal.clone();
 		advancer.advance(yesterday, "day", -1);
@@ -147,7 +149,7 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns the correct status when pointed to middle of window', function() {
-		var cal = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var midWindow = cal.clone();
 		advancer.advance(midWindow, "hour", 12);
@@ -163,9 +165,9 @@ describe("DateTimeWindowsIterator", function() {
     });
 	
     it ('returns 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', function() {
-		var cal1 = new timezoneJS.Date(2010, 12-1, 11, 0, 0, 0, 0);
-		var cal2 = new timezoneJS.Date(2010, 12-1, 13, 0, 0, 0, 0);
-		var cal3 = new timezoneJS.Date(2010, 12-1, 15, 0, 0, 0, 0);
+		var cal1 = moment.tz([2010, 12-1, 11, 0, 0, 0, 0], tz);
+		var cal2 = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		var cal3 = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 		
 		var tomorrow = cal1.clone();
 		advancer.advance(tomorrow, "day", 1);

@@ -5,7 +5,7 @@ var WeeklyTimeWindow = require("./WeeklyTimeWindow.js");
 module.exports = function(params) {
 	params = params || {};
 	var weekly = params.weekly || []; // List<WeeklyTimeWindow>
-	var cal = params.cal || null; // timezoneJS.Date
+	var cal = params.cal || null; // Moment with tz
 	
 	var self = {};
 	
@@ -88,7 +88,7 @@ module.exports = function(params) {
 		newMinuteOfWeek = advanceCalendar(minuteOfWeek, newMinuteOfWeek);
 		return {
 			status : currentWindow.status,
-			until: cal.getTime()
+			until: cal.valueOf()
 		};
 	};
 	
@@ -105,19 +105,19 @@ module.exports = function(params) {
 		
 		// The craziness ahead is required to support DST (causing some dates to be invalid)
 		var targetDate = new Period({
-			days : cal.getDate(),
-			hours : cal.getHours(),
-			minutes : cal.getMinutes()
+			days : cal.date(),
+			hours : cal.hour(),
+			minutes : cal.minute()
 		}).plusMinutes(minutesToAdvance).normalizedStandard();
 		
 		while (true) {
-			cal.setDate(targetDate.getDays());
-			cal.setHours(targetDate.getHours());
-			cal.setMinutes(targetDate.getMinutes());
-			cal.setSeconds(0);
-			cal.setMilliseconds(0);
+			cal.date(targetDate.getDays());
+			cal.hour(targetDate.getHours());
+			cal.minute(targetDate.getMinutes());
+			cal.second(0);
+			cal.millisecond(0);
 			
-			if ((cal.getHours() === targetDate.getHours()) && (cal.getMinutes() === targetDate.getMinutes())) {
+			if ((cal.hour() === targetDate.getHours()) && (cal.minute() === targetDate.getMinutes())) {
 				break;
 			}
 			
@@ -151,13 +151,13 @@ module.exports = function(params) {
 	}
 	
 	/**
-	 * @param cal   timezoneJS.Date
+	 * @param cal   Moment with tz
 	 * @return Integer
 	 */
 	function minutesFromStartOfWeek(cal) {
-		return (cal.getDay() - WeeklyTimeWindow.SUNDAY) * WeeklyTimeWindow.DAY +
-			cal.getHours() * WeeklyTimeWindow.HOUR +
-			cal.getMinutes();
+		return (cal.day() - WeeklyTimeWindow.SUNDAY) * WeeklyTimeWindow.DAY +
+			cal.hour() * WeeklyTimeWindow.HOUR +
+			cal.minute();
 	}
 	
 	return self;
