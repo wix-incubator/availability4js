@@ -71,7 +71,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('returns 3 statuses for a full weekly schedule with a non-redundant exception', function() {
+    it ('returns 3 statuses for a full weekly schedule with a non-redundant exception with an end date', function() {
 		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		
 		var yesterday = cal.clone();
@@ -128,4 +128,42 @@ describe("AvailabilityIterator", function() {
 		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
     });
+
+    it ('returns a single status for a full weekly schedule with an exception "until forever"', function() {
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		
+		var ex = when(cal, "day", 1, false);
+		ex.end = null;
+		
+		var tester = createTester({
+			cal: cal,
+			weekly: null,
+			exceptions: [ex]
+		});
+		
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE);
+		tester.assertDone();
+    });
+
+    it ('returns a single status for a partial weekly schedule with an exception "until forever"', function() {
+		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+
+		var ex = when(cal, "day", 1, false);
+		ex.end = null;
+
+		var tester = createTester({
+			cal: cal,
+			weekly: [
+				{
+					minuteOfWeek: WeeklyTimeWindow.SUNDAY,
+					durationMins: WeeklyTimeWindow.DAY
+				}
+			],
+			exceptions: [ex]
+		});
+		
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE);
+		tester.assertDone();
+    });
+
 });

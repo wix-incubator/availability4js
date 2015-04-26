@@ -27,11 +27,11 @@ module.exports = function(params) {
 	self.hasNext = function() {
 		return hasNext;
 	};
-	
+
 	/** @return Status */
 	self.next = function() {
 		// Future has no exceptions?
-		if (!exceptionStatus.until) {
+		if (exceptionStatus.status === Status.STATUS_UNKNOWN && !exceptionStatus.until) {
 			// Continue with regular statuses
 			var lastRegularStatus = regularStatus;
 			if (regularIt.hasNext()) {
@@ -43,9 +43,15 @@ module.exports = function(params) {
 		}
 		
 		// So we do have real exceptions to deal with
-		
+        
 		// Real exceptions take precedent
 		if (Status.STATUS_UNKNOWN !== exceptionStatus.status) {
+            // If the exception is indefinite, it trumps everything else
+            if (!exceptionStatus.until) {
+                hasNext = false;
+                return exceptionStatus;
+            }
+		
 			var lastExceptionStatus = exceptionStatus;
 			exceptionStatus = exceptionsIt.next(); // we know there are still real exceptions later
 			
