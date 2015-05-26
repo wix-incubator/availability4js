@@ -65,6 +65,25 @@ describe("WeeklyTimeWindowsIterator", function() {
 		}
     });
 	
+    it ('returns the correct status when starting mid-minute in a Sunday-only schedule', function() {
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 30, 0], tz);
+		
+		var tester = createTester({
+			cal: cal,
+			weekly: [
+				{
+					minuteOfWeek: WeeklyTimeWindow.SUNDAY,
+					durationMins: WeeklyTimeWindow.DAY
+				}
+			]
+		});
+		
+		var calNoSeconds = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
+		tester.setCal(calNoSeconds);
+		
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+    });
+	
     it ('returns an infinite series of statuses for a Monday-only schedule', function() {
 		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 		

@@ -11,6 +11,13 @@ module.exports = function(params) {
 	var advancer = new CalendarAdvancer();
 	
 	/**
+	 * @param cal   Moment with tz
+	 */
+	self.setCal = function(_cal) {
+		cal = _cal;
+	};
+	
+	/**
 	 * @param status   Status
 	 * @param field    "day"
 	 * @param amount   Integer
