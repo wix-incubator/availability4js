@@ -98,7 +98,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone();
     });
 	
-    it ('returns a single status when given a single "since forever, until forever" window and pointed to it', function() {
+    it ('returns a single status when given a single "since forever, until forever" (as null) window and pointed to it', function() {
 		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 		
 		var tester = createTester({
@@ -106,6 +106,20 @@ describe("DateTimeWindowsIterator", function() {
 			timeWindows: [{
 				start: null,
 				end: null,
+				available: true
+			}]
+		});
+		
+		tester.assertLastStatus(Status.STATUS_AVAILABLE);
+		tester.assertDone();
+    });
+
+    it ('returns a single status when given a single "since forever, until forever" (as undefined) window and pointed to it', function() {
+		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
+		
+		var tester = createTester({
+			cal: cal,
+			timeWindows: [{
 				available: true
 			}]
 		});

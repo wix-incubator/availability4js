@@ -33,15 +33,15 @@ module.exports = function(params) {
 	 * @return Long
 	 */
 	function getTime(date) {
-		if (date === null) {
-			return null;
+		if (!date) {
+            return null;
 		}
 		return moment.tz([date.year, date.month - 1, date.day, date.hour, date.minute], tz).valueOf();
 	}
 	
     function strictlyBefore(window1EndTs, window2StartTs) {
-        if ((window1EndTs == null) || (window2StartTs == null)) {
-            return false;
+        if ((window1EndTs === null) || (window2StartTs === null)) {
+            return false
         }
         return (window1EndTs <= window2StartTs);
     }
@@ -80,7 +80,7 @@ module.exports = function(params) {
 	var lastWindowUntilForever = null;
 	if (timeWindows.length > 0) {
 		index = findInsertionIndex(timeWindows, cal.valueOf());
-		lastWindowUntilForever = (timeWindows[timeWindows.length-1].end === null);
+		lastWindowUntilForever = !timeWindows[timeWindows.length-1].end;
 	} else {
 		index = new Index(0, true);
 		lastWindowUntilForever = false;
