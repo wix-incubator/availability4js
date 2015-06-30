@@ -97,6 +97,8 @@ module.exports = function(params) {
 
 	/** @return Status */
 	self.next = function() {
+        var result;
+        
 		if (index.index === timeWindows.length) {
 			result = {
 				status : Status.STATUS_UNKNOWN,
