@@ -5,7 +5,7 @@ var WeeklyTimeWindow = require("./WeeklyTimeWindow.js");
 module.exports = function(params) {
 	params = params || {};
 	var weekly = params.weekly || []; // List<WeeklyTimeWindow>
-	var cal = params.cal || null; // Moment with tz
+	var cal = params.cal || new moment(); // Moment with tz
 	
 	var self = {};
 	
