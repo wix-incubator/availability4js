@@ -2,7 +2,7 @@
 
 import * as Status from "./Status.js"
 import moment from 'moment-timezone'
-import {Index, DateTimeWindowsInserter} from "./DateTimeWindowsInserter.js"
+import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils.js"
 
 
 export class DateTimeWindowsIterator {
@@ -16,24 +16,13 @@ export class DateTimeWindowsIterator {
 		this._index = null
 		this._lastWindowUntilForever = null
 		if (this._timeWindows.length > 0) {
-			this._index = new DateTimeWindowsInserter().findInsertionIndex(this._timeWindows, cal.valueOf(), this._tz)
+			this._index = findInsertionIndex(this._timeWindows, cal.valueOf(), this._tz)
 			this._lastWindowUntilForever = !timeWindows[this._timeWindows.length-1].end
 		} else {
 			this._index = new Index(0, true)
 			this._lastWindowUntilForever = false
 		}
 		
-	}
-	
-	/**
-	 * @param date   availability.Date
-	 * @return Long
-	 */
-	_getTime(date, tz) {
-		if (!date) {
-            return null
-		}
-		return moment.tz([date.year, date.month - 1, date.day, date.hour, date.minute], tz).valueOf()
 	}
 	
 	/** @return Boolean */
@@ -59,14 +48,14 @@ export class DateTimeWindowsIterator {
 			if (!this._index.isDummyBefore) {
 				result = {
 					status: (nextTimeWindow.available ? Status.STATUS_AVAILABLE : Status.STATUS_UNAVAILABLE),
-					until: this._getTime(nextTimeWindow.end, this._tz),
+					until: getTime(nextTimeWindow.end, this._tz),
 					reason: nextTimeWindow.reason,
 					comment: nextTimeWindow.comment
 				}
 			} else {
 				result = {
 					status: Status.STATUS_UNKNOWN,
-					until: this._getTime(nextTimeWindow.start, this._tz)
+					until: getTime(nextTimeWindow.start, this._tz)
 				}
 			}
 		}
