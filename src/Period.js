@@ -41,7 +41,7 @@ var Period = function(params) {
 		var normalizedHours = hours;
 		var normalizedMinutes = minutes;
 		
-		extraHours = Math.floor(normalizedMinutes / 60);
+		var extraHours = Math.floor(normalizedMinutes / 60);
 		normalizedMinutes -= (60 * extraHours);
 		normalizedHours += extraHours;
 		
