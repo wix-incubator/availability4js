@@ -1,6 +1,6 @@
 "use strict"
 
-import {should} from 'chai'
+import chai from 'chai'
 import {AvailabilityIterator} from "../src/AvailabilityIterator.js"
 import {StatusIteratorTester} from "./StatusIteratorTester.js"
 import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow.js"
