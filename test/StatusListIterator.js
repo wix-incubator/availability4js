@@ -1,18 +1,18 @@
-module.exports = function(params) {
-	params = params || {};
-	var statuses = params.statuses || []; // List<Status>
+"use strict"
+
+export class StatusListIterator {
+	constructor({statuses}) {
+		statuses = statuses || [] // List<Status>
+		
+		this._statuses = statuses
+		this._i = 0
+	}
 	
-	var self = {};
+	hasNext() {
+		return (this._i < this._statuses.length)
+	}
 	
-	var i = 0;
-	
-	self.hasNext = function() {
-		return (i < statuses.length);
-	};
-	
-	self.next = function() {
-		return statuses[i++];
-	};
-	
-	return self;
-};
+	next() {
+		return this._statuses[this._i++]
+	}
+}

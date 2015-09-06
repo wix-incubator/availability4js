@@ -1,29 +1,28 @@
-var MergingStatusIterator = require("./MergingStatusIterator.js");
-var TimeWindowsIterator = require("./TimeWindowsIterator.js");
+"use strict"
 
-module.exports = function(params) {
-	params = params || {};
-	var av = params.availability || null; // availability.Availability
-	var cal = params.cal || null; // Moment with tz
-	
-	var self = {};
-	
-	var it = new MergingStatusIterator({
-		it : new TimeWindowsIterator({
-			availability : av,
-			cal : cal
+import {MergingStatusIterator} from "./MergingStatusIterator.js"
+import {TimeWindowsIterator} from "./TimeWindowsIterator.js"
+
+export class AvailabilityIterator {
+	constructor({availability, cal}) {
+		availability = availability || null // availability.Availability
+		cal = cal || null // Moment with tz
+		
+		this._it = new MergingStatusIterator({
+			it: new TimeWindowsIterator({
+				availability: availability,
+				cal: cal
+			})
 		})
-	});
-
+	}
+	
 	/** @return Boolean */
-	self.hasNext = function() {
-		return it.hasNext();
-	};
+	hasNext() {
+		return this._it.hasNext()
+	}
 	
 	/** @return Status */
-	self.next = function() {
-		return it.next();
-	};
-	
-	return self;
-};
+	next() {
+		return this._it.next()
+	}
+}

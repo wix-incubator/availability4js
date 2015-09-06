@@ -1,49 +1,52 @@
-var should = require('chai').should();
-var CalendarAdvancer = require('./CalendarAdvancer.js');
+"use strict"
 
-module.exports = function(params) {
-	params = params || {};
-	var it = params.it || null; // Iterator<Status>
-	var cal = params.cal || null; // Moment with tz
-	
-	var self = {};
-	
-	var advancer = new CalendarAdvancer();
+import chai from 'chai'
+import {CalendarAdvancer} from './CalendarAdvancer.js'
+
+let should = chai.should()
+
+export class StatusIteratorTester {
+	constructor({it, cal}) {
+		it = it || null // Iterator<Status>
+		cal = cal || null // Moment with tz
+		
+		this._it = it
+		this._cal = cal
+		this._advancer = new CalendarAdvancer()
+	}
 	
 	/**
 	 * @param cal   Moment with tz
 	 */
-	self.setCal = function(_cal) {
-		cal = _cal;
-	};
+	setCal(cal) {
+		this._cal = cal
+	}
 	
 	/**
 	 * @param status   Status
 	 * @param field    "day"
 	 * @param amount   Integer
 	 */
-	self.assertNextStatus = function(status, field, amount) {
-		it.hasNext().should.be.true;
-		var actualStatus = it.next();
-		actualStatus.status.should.equal(status);
-		actualStatus.until.should.not.equal(null);
-		advancer.advance(cal, field, amount);
-		actualStatus.until.should.equal(cal.valueOf());
-	};
+	assertNextStatus(status, field, amount) {
+		this._it.hasNext().should.be.true
+		let actualStatus = this._it.next()
+		actualStatus.status.should.equal(status)
+		actualStatus.until.should.not.equal(null)
+		this._advancer.advance(this._cal, field, amount)
+		actualStatus.until.should.equal(this._cal.valueOf())
+	}
 	
 	/**
 	  * @param status   String
 	  */
-	self.assertLastStatus = function(status) {
-		it.hasNext().should.be.true;
-		var actualStatus = it.next();
-		actualStatus.status.should.equal(status);
-		should.equal(actualStatus.until, null);
-	};
+	assertLastStatus(status) {
+		this._it.hasNext().should.be.true
+		let actualStatus = this._it.next()
+		actualStatus.status.should.equal(status)
+		should.equal(actualStatus.until, null)
+	}
 	
-	self.assertDone = function() {
-		it.hasNext().should.be.false;
-	};
-	
-	return self;
-};
+	assertDone() {
+		this._it.hasNext().should.be.false
+	}
+}

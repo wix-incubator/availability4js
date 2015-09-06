@@ -1,15 +1,18 @@
-var should = require('chai').should();
-var WeeklyTimeWindowsIterator = require("../src/WeeklyTimeWindowsIterator.js");
-var WeeklyTimeWindow = require("../src/WeeklyTimeWindow.js");
-var StatusIteratorTester = require("./StatusIteratorTester.js");
-var Status = require("../src/Status.js");
-var moment = require('moment-timezone');
+"use strict"
+
+import chai from 'chai'
+import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow.js"
+import {WeeklyTimeWindowsIterator} from "../src/WeeklyTimeWindowsIterator.js"
+import {StatusIteratorTester} from "./StatusIteratorTester.js"
+import * as Status from "../src/Status.js"
+import moment from 'moment-timezone'
+
+let should = chai.should()
 
 describe("WeeklyTimeWindowsIterator", function() {
-	function createTester(params) {
-		params = params || {};
-		var cal = params.cal || null; // Moment with tz
-		var weekly = params.weekly || null; // List<DateTimeWindow>
+	function createTester({cal, weekly}) {
+		cal = cal || null // Moment with tz
+		weekly = weekly || null // List<DateTimeWindow>
 
 		return new StatusIteratorTester({
 			it: new WeeklyTimeWindowsIterator({
@@ -17,39 +20,39 @@ describe("WeeklyTimeWindowsIterator", function() {
 				cal: cal
 			}),
 			cal: cal
-		});
+		})
 	}
 
-	var tz = "Asia/Jerusalem";
+	let tz = "Asia/Jerusalem"
 	
     it ('returns a single available status when given null weekly', function() {
-		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: null
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns a single available status when given empty weekly', function() {
-		var cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: []
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns an infinite series of statuses for a Sunday-only schedule', function() {
-		var cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -57,18 +60,18 @@ describe("WeeklyTimeWindowsIterator", function() {
 					durationMins: WeeklyTimeWindow.DAY
 				}
 			]
-		});
+		})
 		
-		for (var i = 0, l = 100; i < l; ++i) {
-			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6);
+		for (let i = 0, l = 100; i < l; ++i) {
+			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6)
 		}
-    });
+    })
 	
     it ('returns the correct status when starting mid-minute in a Sunday-only schedule', function() {
-		var cal = moment.tz([2010, 12-1, 12, 0, 0, 30, 0], tz);
+		let cal = moment.tz([2010, 12-1, 12, 0, 0, 30, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -76,18 +79,18 @@ describe("WeeklyTimeWindowsIterator", function() {
 					durationMins: WeeklyTimeWindow.DAY
 				}
 			]
-		});
+		})
 		
-		var calNoSeconds = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
-		tester.setCal(calNoSeconds);
+		let calNoSeconds = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
+		tester.setCal(calNoSeconds)
 		
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-    });
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+    })
 	
     it ('returns an infinite series of statuses for a Monday-only schedule', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -95,18 +98,18 @@ describe("WeeklyTimeWindowsIterator", function() {
 					durationMins: WeeklyTimeWindow.DAY
 				}
 			]
-		});
+		})
 		
-		for (var i = 0, l = 100; i < l; ++i) {
-			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6);
+		for (let i = 0, l = 100; i < l; ++i) {
+			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6)
 		}
-    });
+    })
 	
     it ('returns the correct status when pointed to middle of window', function() {
-		var cal = moment.tz([2010, 12-1, 13, 12, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 12, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -114,15 +117,15 @@ describe("WeeklyTimeWindowsIterator", function() {
 					durationMins: WeeklyTimeWindow.DAY
 				}
 			]
-		});
+		})
 		
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
-    });
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12)
+    })
 	
     it ('returns an infinite series of statuses for a Monday-Tuesday-Friday schedule', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -134,13 +137,13 @@ describe("WeeklyTimeWindowsIterator", function() {
 					durationMins: WeeklyTimeWindow.DAY
 				}
 			]
-		});
+		})
 		
-		for (var i = 0, l = 100; i < l; ++i) {
-			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
-			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
-			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
+		for (let i = 0, l = 100; i < l; ++i) {
+			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2)
+			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2)
+			tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+			tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2)
 		}
-    });
-});
+    })
+})

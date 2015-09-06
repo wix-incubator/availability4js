@@ -1,57 +1,57 @@
-module.exports = function(params) {
-	params = params || {};
-	var it = params.it || null; // Iterator<Status>
+"use strict"
 
-	var self = {};
+export class MergingStatusIterator {
+	constructor({it}) {
+		it = it || null // Iterator<Status>
+		
+		this._it = it
+		this._nextStatus = ((this._it !== null) && (this._it.hasNext())) ? this._it.next() : null
+	}
 	
-	var nextStatus = ((it !== null) && (it.hasNext())) ? it.next() : null;
+	hasNext() {
+		return (this._nextStatus != null)
+	}
 	
-	self.hasNext = function() {
-		return (nextStatus != null);
-	};
+	/** @return Status */
+	next() {
+		let mergedStatus = this._nextStatus
+		while (true) {
+			if (!this._it.hasNext()) {
+				this._nextStatus = null
+				break
+			}
+			this._nextStatus = this._it.next()
+			if (!this._statusEqualsIgnoreUntil(this._nextStatus, mergedStatus)) {
+				break
+			}
+			mergedStatus.until = this._nextStatus.until
+		}
+		return mergedStatus
+	}
 	
-	function stringMapEquals(map1, map2) {
+	_stringMapEquals(map1, map2) {
 	    if (!map1) {
-	    	return (map2 ? false : true);
+	    	return (map2 ? false : true)
 	    } else if (!map2) {
-	    	return false;
+	    	return false
 	    }
 	    
-	    for (var key in map1) {
+	    for (let key in map1) {
 	        if (map1[key] !== map2[key]) {
-	            return false;
+	            return false
 	        }
 	    }
-	    for (var key in map2) {
+	    for (let key in map2) {
 	        if (map2[key] !== map1[key]) {
-	            return false;
+	            return false
 	        }
 	    }
-	    return true;
+	    return true
 	}
-
-	function statusEqualsIgnoreUntil(status1, status2) {
+	
+	_statusEqualsIgnoreUntil(status1, status2) {
 	    return ((status1.status === status2.status) &&
 	    		(status1.reason === status2.reason) &&
-	    		(stringMapEquals(status1.comment, status2.comment)));
+	    		(this._stringMapEquals(status1.comment, status2.comment)))
 	}
-
-	/** @return Status */
-	self.next = function() {
-		var mergedStatus = nextStatus;
-		while (true) {
-			if (!it.hasNext()) {
-				nextStatus = null;
-				break;
-			}
-			nextStatus = it.next();
-			if (!statusEqualsIgnoreUntil(nextStatus, mergedStatus)) {
-				break;
-			}
-			mergedStatus.until = nextStatus.until;
-		}
-		return mergedStatus;
-	};
-
-	return self;
-};
+}

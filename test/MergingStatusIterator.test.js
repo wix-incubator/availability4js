@@ -1,15 +1,18 @@
-var should = require('chai').should();
-var MergingStatusIterator = require("../src/MergingStatusIterator.js");
-var StatusIteratorTester = require("./StatusIteratorTester.js");
-var StatusListIterator = require("./StatusListIterator.js");
-var Status = require("../src/Status.js");
-var moment = require('moment-timezone');
+"use strict"
+
+import chai from 'chai'
+import {MergingStatusIterator} from "../src/MergingStatusIterator.js"
+import {StatusIteratorTester} from "./StatusIteratorTester.js"
+import {StatusListIterator} from "./StatusListIterator.js"
+import * as Status from "../src/Status.js"
+import moment from 'moment-timezone'
+
+let should = chai.should()
 
 describe("MergingStatusIterator", function() {
-	function createTester(params) {
-		params = params || {};
-		var cal = params.cal || null; // Moment with tz
-		var statuses = params.statuses || []; // List<Status>
+	function createTester({cal, statuses}) {
+		cal = cal || null // Moment with tz
+		statuses = statuses || [] // List<Status>
 
 		return new StatusIteratorTester({
 			it: new MergingStatusIterator({
@@ -18,27 +21,27 @@ describe("MergingStatusIterator", function() {
 				})
 			}),
 			cal: cal
-		});
+		})
 	}
 	
     it ('returns a single status when given a single status', function() {
-		var tester = createTester({
+		let tester = createTester({
 			statuses: [
 				{
 					status: Status.STATUS_AVAILABLE,
 					until: null
 				}			
 			]
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns two statuses when given two different statuses', function() {
-		var cal = moment([2010, 12-1, 15, 0, 0, 0, 0]);
+		let cal = moment([2010, 12-1, 15, 0, 0, 0, 0])
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			statuses: [
 				{
@@ -50,17 +53,17 @@ describe("MergingStatusIterator", function() {
 					until: null
 				}
 			]
-		});
+		})
 		
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 0);
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 0)
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns a single status when given two same statuses', function() {
-		var cal = moment([2010, 12-1, 15, 0, 0, 0, 0]);
+		let cal = moment([2010, 12-1, 15, 0, 0, 0, 0])
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			statuses: [
 				{
@@ -72,9 +75,9 @@ describe("MergingStatusIterator", function() {
 					until: null
 				}
 			]
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });	
-});
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })	
+})

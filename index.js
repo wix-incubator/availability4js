@@ -1,5 +1,7 @@
-exports.AvailabilityIterator = require("./src/AvailabilityIterator.js");
+"use strict"
 
-exports.STATUS_UNKNOWN = require("./src/Status.js").STATUS_UNKNOWN;
-exports.STATUS_UNAVAILABLE = require("./src/Status.js").STATUS_UNAVAILABLE;
-exports.STATUS_AVAILABLE = require("./src/Status.js").STATUS_AVAILABLE;
+import {AvailabilityIterator} from "./src/AvailabilityIterator.js"
+import * as Status from "./src/Status.js"
+
+export {AvailabilityIterator as AvailabilityIterator}
+export {Status as Status}

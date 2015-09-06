@@ -1,17 +1,18 @@
-var should = require('chai').should();
-var AvailabilityIterator = require("../src/AvailabilityIterator.js");
-var StatusIteratorTester = require("./StatusIteratorTester.js");
-var WeeklyTimeWindow = require("../src/WeeklyTimeWindow.js");
-var CalendarAdvancer = require("./CalendarAdvancer.js");
-var Status = require("../src/Status.js");
-var moment = require('moment-timezone');
+"use strict"
+
+import {should} from 'chai'
+import {AvailabilityIterator} from "../src/AvailabilityIterator.js"
+import {StatusIteratorTester} from "./StatusIteratorTester.js"
+import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow.js"
+import {CalendarAdvancer} from "./CalendarAdvancer.js"
+import * as Status from "../src/Status.js"
+import moment from 'moment-timezone'
 
 describe("AvailabilityIterator", function() {
-	function createTester(params) {
-		params = params || {};
-		var cal = params.cal || null; // Moment with tz
-		var weekly = params.weekly || null; // List<WeeklyTimeWindow>
-		var exceptions = params.exceptions || null; // List<DateTimeWindow>
+	function createTester({cal, weekly, exceptions}) {
+		cal = cal || null // Moment with tz
+		weekly = weekly || null // List<WeeklyTimeWindow>
+		exceptions = exceptions || null // List<DateTimeWindow>
 
 		return new StatusIteratorTester({
 			it: new AvailabilityIterator({
@@ -22,7 +23,7 @@ describe("AvailabilityIterator", function() {
 				cal: cal
 			}),
 			cal: cal
-		});
+		})
 	}
 	
 	function toDate(cal) {
@@ -32,29 +33,29 @@ describe("AvailabilityIterator", function() {
 			day: cal.date(),
 			hour: cal.hour(),
 			minute: cal.minute()
-		};
+		}
 	}
 	
-	var advancer = new CalendarAdvancer();
+	let advancer = new CalendarAdvancer()
 	function when(startCal, field, amount, available) {
-		var endCal = startCal.clone();
-		advancer.advance(endCal, field, amount);
+		let endCal = startCal.clone()
+		advancer.advance(endCal, field, amount)
 		return {
 			start: toDate(startCal),
 			end: toDate(endCal),
 			available: available
-		};
+		}
 	}
 
-	var tz = "Asia/Jerusalem";
+	let tz = "Asia/Jerusalem"
 	
     it ('returns a single status for a full weekly schedule with a redundant exception', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
-		var yesterday = cal.clone();
-		advancer.advance(yesterday, "day", -1);
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: yesterday,
 			weekly: [
 				{
@@ -65,19 +66,19 @@ describe("AvailabilityIterator", function() {
 			exceptions: [
 				when(cal, "day", 1, true)
 			]
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns 3 statuses for a full weekly schedule with a non-redundant exception with an end date', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
-		var yesterday = cal.clone();
-		advancer.advance(yesterday, "day", -1);
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: yesterday,
 			weekly: [
 				{
@@ -88,19 +89,19 @@ describe("AvailabilityIterator", function() {
 			exceptions: [
 				when(cal, "day", 1, false)
 			]
-		});
+		})
 		
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-		tester.assertLastStatus(Status.STATUS_AVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1)
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns a series of statuses for a complex weekly schedule with an exception', function() {
-		var cal1 = moment.tz([2010, 12-1, 10, 0, 0, 0, 0], tz);
-		var cal2 = moment.tz([2010, 12-1, 14, 12, 0, 0, 0], tz);
+		let cal1 = moment.tz([2010, 12-1, 10, 0, 0, 0, 0], tz)
+		let cal2 = moment.tz([2010, 12-1, 14, 12, 0, 0, 0], tz)
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal1,
 			weekly: [
 				{
@@ -115,43 +116,43 @@ describe("AvailabilityIterator", function() {
 			exceptions: [
 				when(cal2, "hour", 12, false)
 			]
-		});
+		})
 		
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "hour", 12);
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 3);
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
-    });
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "hour", 12)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 3)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2)
+    })
 
     it ('returns a single status for a full weekly schedule with an exception "until forever"', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
-		var ex = when(cal, "day", 1, false);
-		ex.end = null;
+		let ex = when(cal, "day", 1, false)
+		ex.end = null
 		
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: null,
 			exceptions: [ex]
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_UNAVAILABLE);
-		tester.assertDone();
-    });
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE)
+		tester.assertDone()
+    })
 
     it ('returns a single status for a partial weekly schedule with an exception "until forever"', function() {
-		var cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 
-		var ex = when(cal, "day", 1, false);
-		ex.end = null;
+		let ex = when(cal, "day", 1, false)
+		ex.end = null
 
-		var tester = createTester({
+		let tester = createTester({
 			cal: cal,
 			weekly: [
 				{
@@ -160,10 +161,9 @@ describe("AvailabilityIterator", function() {
 				}
 			],
 			exceptions: [ex]
-		});
+		})
 		
-		tester.assertLastStatus(Status.STATUS_UNAVAILABLE);
-		tester.assertDone();
-    });
-
-});
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE)
+		tester.assertDone()
+    })
+})
