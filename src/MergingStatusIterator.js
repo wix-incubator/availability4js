@@ -1,10 +1,12 @@
 "use strict"
 
 export class MergingStatusIterator {
-	constructor({it}) {
+	constructor({it, maxIterations}) {
 		it = it || null // Iterator<Status>
+		maxIterations = maxIterations || null // Int
 		
 		this._it = it
+		this._maxIterations = maxIterations
 		this._nextStatus = ((this._it !== null) && (this._it.hasNext())) ? this._it.next() : null
 	}
 	
@@ -15,6 +17,8 @@ export class MergingStatusIterator {
 	/** @return Status */
 	next() {
 		let mergedStatus = this._nextStatus
+
+		let iteration = 0
 		while (true) {
 			if (!this._it.hasNext()) {
 				this._nextStatus = null
@@ -25,6 +29,10 @@ export class MergingStatusIterator {
 				break
 			}
 			mergedStatus.until = this._nextStatus.until
+			
+			if ((this._maxIterations !== null) && (iteration++ >= this._maxIterations)) {
+				break
+			}
 		}
 		return mergedStatus
 	}

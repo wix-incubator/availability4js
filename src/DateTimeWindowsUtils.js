@@ -55,7 +55,7 @@ export function getTime(date, tz) {
 	return moment.tz([date.year, date.month - 1, date.day, date.hour, date.minute], tz).valueOf()
 }
 
-function strictlyBefore(window1EndTs, window2StartTs) {
+export function strictlyBefore(window1EndTs, window2StartTs) {
 	if ((window1EndTs === null) || (window2StartTs === null)) {
 		return false
 	}
