@@ -34,7 +34,8 @@ module.exports = function(grunt) {
                         loader: "style-loader!css-loader!less-loader?strictMath!"+__dirname+"/webpack-loaders/css-dir-loader.js!less-loader"
                     }
                     ]
-                }
+                },
+                externals:["moment", "moment-timezone"]
             }
         }
     });
