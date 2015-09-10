@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                     },
                     {
                         test: /\.js$/, 
-                        loaders: ['babel'],
+                        loaders: ['babel?blacklist[]=strict&compact=false']
                     },
                     {
                         test: /\.(png|jpg)$/,
