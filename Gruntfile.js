@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         webpack: {
             all:{
-                devtool: 'eval',
+                devtool: 'source-map',
                 entry: './index',
                 output: {
                     path:"dist/",
