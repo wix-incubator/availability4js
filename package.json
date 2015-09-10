@@ -1,6 +1,6 @@
 {
   "name": "availability",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Wix Restaurants Availability Utils Module",
   "main": "dist/index.js",
   "scripts": {
