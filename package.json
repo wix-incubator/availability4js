@@ -31,12 +31,11 @@
     "babel": "^5.8.21",
     "babel-core": "^5.8.22",
     "babel-loader": "^5.3.2",
-    "chai": "^2.2.0",
+    "chai": "^3.5.0",
     "grunt": "^0.4.5",
     "grunt-webpack": "^1.0.11",
 	"grunt-cli": "^0.1.13",
-    "jsx-loader": "^0.13.2",
-    "mocha": "^2.2.1",
+    "mocha": "^2.4.5",
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.10.1",
     "@wix/wnpm-ci": "*"
@@ -45,8 +44,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "moment": "^2.10.2",
-    "moment-timezone": "^0.3.1"
+    "moment": "^2.11.2",
+    "moment-timezone": "^0.5.0"
   },
   "directories": {
     "test": "test"
