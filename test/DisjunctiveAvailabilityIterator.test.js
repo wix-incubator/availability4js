@@ -10,9 +10,6 @@ import moment from 'moment-timezone'
 
 describe("DisjunctiveAvailabilityIterator", function() {
 	function createTester({cal, availabilities}) {
-		cal = cal || null // Moment with tz
-		availabilities = availabilities || [] // List<Availability>
-
 		return new StatusIteratorTester({
 			it: new DisjunctiveAvailabilityIterator({
 				availabilities: availabilities,
@@ -44,6 +41,35 @@ describe("DisjunctiveAvailabilityIterator", function() {
 	}
 
 	let tz = "Asia/Jerusalem"
+
+	it ('defaults to treating availabilities as empty array', function() {
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
+		
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
+		
+		let tester = createTester({
+			cal: yesterday
+		})
+		
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE)
+		tester.assertDone()
+    })
+	
+	it ('defaults to treating null availabilities as empty availabilities', function() {
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
+		
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
+		
+		let tester = createTester({
+			availabilities: null,
+			cal: yesterday
+		})
+		
+		tester.assertLastStatus(Status.STATUS_UNAVAILABLE)
+		tester.assertDone()
+    })
 	
     it ('returns a single status for a full weekly schedule with a redundant exception', function() {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)

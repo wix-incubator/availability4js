@@ -49,6 +49,41 @@ describe("AvailabilityIterator", function() {
 
 	let tz = "Asia/Jerusalem"
 	
+    it ('defaults to treating availability as empty', function() {
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
+		
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
+		
+		const tester = new StatusIteratorTester({
+			it: new AvailabilityIterator({
+				cal: cal
+			}),
+			cal: cal
+		})
+		
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
+	
+    it ('treats null availability as empty availability', function() {
+		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
+		
+		let yesterday = cal.clone()
+		advancer.advance(yesterday, "day", -1)
+		
+		const tester = new StatusIteratorTester({
+			it: new AvailabilityIterator({
+				availability: null,
+				cal: cal
+			}),
+			cal: cal
+		})
+		
+		tester.assertLastStatus(Status.STATUS_AVAILABLE)
+		tester.assertDone()
+    })
+	
     it ('returns a single status for a full weekly schedule with a redundant exception', function() {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
