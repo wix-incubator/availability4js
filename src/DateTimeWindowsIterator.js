@@ -1,9 +1,7 @@
 "use strict"
 
 import * as Status from "./Status.js"
-import moment from 'moment-timezone'
 import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils.js"
-
 
 export class DateTimeWindowsIterator {
 	constructor({timeWindows, cal}) {

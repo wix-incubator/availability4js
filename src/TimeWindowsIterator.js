@@ -78,7 +78,7 @@ export class TimeWindowsIterator {
 		} else {
 			this._exceptionStatus = this._exceptionsIt.next() // we know there are still real exceptions later
 			let lastRegularStatus = this._regularStatus
-			this._regularStatus = regularIt.next() // we know there are still regular statuses later
+			this._regularStatus = this._regularIt.next() // we know there are still regular statuses later
 			return lastRegularStatus
 		}
 	}

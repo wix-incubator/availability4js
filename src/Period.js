@@ -16,7 +16,7 @@ export class Period {
 		return this.minutes
 	}
 	toStandardMinutes() {
-		return (days * 24 + hours) * 60 + minutes
+		return (this.days * 24 + this.hours) * 60 + this.minutes
 	}
 	plus({days, hours, minutes}) {
 		return new Period({
