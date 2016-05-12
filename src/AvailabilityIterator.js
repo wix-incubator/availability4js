@@ -4,9 +4,12 @@ import {MergingStatusIterator} from "./MergingStatusIterator"
 import {TimeWindowsIterator} from "./TimeWindowsIterator"
 
 export class AvailabilityIterator {
-	constructor({availability, cal}) {
-		availability = availability || null // availability.Availability
-		cal = cal || null // Moment with tz
+	/**
+	 * @param availability   availability.Availability
+	 * @param cal            Moment with tz
+	 */
+	constructor({availability = {}, cal}) {
+		availability = availability || {} // null availability is treated as empty availability
 		
 		this._it = new MergingStatusIterator({
 			it: new TimeWindowsIterator({

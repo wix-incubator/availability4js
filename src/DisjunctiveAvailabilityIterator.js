@@ -76,9 +76,12 @@ export class DisjunctiveTimeWindowsIterator {
 }
 
 export class DisjunctiveAvailabilityIterator {
-	constructor({availabilities, cal}) {
-		availabilities = availabilities || [] // List<availability.Availability>
-		cal = cal || null // Moment with tz
+	/**
+	 * @param availabilities   List<availability.Availability>
+	 * @param cal              Moment with tz
+	 */
+	constructor({availabilities = [], cal}) {
+		availabilities = availabilities || [] // null availabilities are treated as empty array
 		
 		this._it = new MergingStatusIterator({
 			it: new DisjunctiveTimeWindowsIterator({availabilities, cal}),
