@@ -1,7 +1,7 @@
 "use strict"
 
-import {MergingStatusIterator} from "./MergingStatusIterator.js"
-import {TimeWindowsIterator} from "./TimeWindowsIterator.js"
+import {MergingStatusIterator} from "./MergingStatusIterator"
+import {TimeWindowsIterator} from "./TimeWindowsIterator"
 
 export class AvailabilityIterator {
 	constructor({availability, cal}) {

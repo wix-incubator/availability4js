@@ -1,8 +1,8 @@
 "use strict"
 
-import {AvailabilityIterator} from "./AvailabilityIterator.js"
-import {MergingStatusIterator} from "./MergingStatusIterator.js"
-import {strictlyBefore} from "./DateTimeWindowsUtils.js"
+import {AvailabilityIterator} from "./AvailabilityIterator"
+import {MergingStatusIterator} from "./MergingStatusIterator"
+import {strictlyBefore} from "./DateTimeWindowsUtils"
 
 export class DisjunctiveTimeWindowsIterator {
 	constructor({availabilities, cal}) {

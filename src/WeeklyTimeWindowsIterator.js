@@ -1,8 +1,8 @@
 "use strict"
 
-import * as Status from "./Status.js"
-import {Period} from "./Period.js"
-import * as WeeklyTimeWindow from "./WeeklyTimeWindow.js"
+import * as Status from "./Status"
+import {Period} from "./Period"
+import * as WeeklyTimeWindow from "./WeeklyTimeWindow"
 
 export class WeeklyTimeWindowsIterator {
 	constructor({weekly, cal}) {

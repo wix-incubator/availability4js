@@ -1,7 +1,7 @@
 "use strict"
 
-import * as Status from "./Status.js"
-import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils.js"
+import * as Status from "./Status"
+import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils"
 
 export class DateTimeWindowsIterator {
 	constructor({timeWindows, cal}) {
