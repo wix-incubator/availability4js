@@ -5,16 +5,17 @@ import {MergingStatusIterator} from "./MergingStatusIterator"
 import {strictlyBefore} from "./DateTimeWindowsUtils"
 
 export class DisjunctiveTimeWindowsIterator {
-	constructor({availabilities, cal}) {
-		availabilities = availabilities || [] // List<availability.Availability>
-		cal = cal || null // Moment with tz
-		
+	/**
+	 * @param availabilities   List<availability.Availability>
+	 * @param cal              Moment with tz
+	 */
+	constructor({availabilities = [], cal}) {
 		this._now = cal.valueOf()
 		this._nextStatus = null
 
 		this._wrapped = []
 		availabilities.forEach(availability => {
-			let it = new AvailabilityIterator({availability, cal})
+			const it = new AvailabilityIterator({availability, cal})
 			this._wrapped.push({
 				it: it,
 				nextStatus: it.next() // There's always at least one status
@@ -31,7 +32,7 @@ export class DisjunctiveTimeWindowsIterator {
 	
 	/** @return Status */
 	next() {
-		let nextStatus = this._nextStatus
+		const nextStatus = this._nextStatus
 		this._advanceNextStatus()
 		return nextStatus
 	}
@@ -47,7 +48,7 @@ export class DisjunctiveTimeWindowsIterator {
 		let earliestUnavailableUntil = null
 		
 		for (let i = 0, l = this._wrapped.length; i < l; ++i) {
-			let wrapped = this._wrapped[i]
+			const wrapped = this._wrapped[i]
 			
 			while ((wrapped.nextStatus !== null) && strictlyBefore(wrapped.nextStatus.until, this._now)) {
 				wrapped.nextStatus = (wrapped.it.hasNext() ? wrapped.it.next() : null)

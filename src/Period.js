@@ -1,10 +1,10 @@
 "use strict"
 
 export class Period {
-	constructor({days, hours, minutes}) {
-		this.days = days || 0
-		this.hours = hours || 0
-		this.minutes = minutes || 0
+	constructor({days = 0, hours = 0, minutes = 0}) {
+		this.days = days
+		this.hours = hours
+		this.minutes = minutes
 	}
 	getDays() {
 		return this.days
@@ -35,11 +35,11 @@ export class Period {
 		let normalizedHours = this.hours
 		let normalizedMinutes = this.minutes
 		
-		let extraHours = Math.floor(normalizedMinutes / 60)
+		const extraHours = Math.floor(normalizedMinutes / 60)
 		normalizedMinutes -= (60 * extraHours)
 		normalizedHours += extraHours
 		
-		let extraDays = Math.floor(normalizedHours / 24)
+		const extraDays = Math.floor(normalizedHours / 24)
 		normalizedHours -= (24 * extraDays)
 		normalizedDays += extraDays
 		

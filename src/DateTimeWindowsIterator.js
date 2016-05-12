@@ -4,9 +4,12 @@ import * as Status from "./Status"
 import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils"
 
 export class DateTimeWindowsIterator {
-	constructor({timeWindows, cal}) {
-		timeWindows = timeWindows || [] // List<DateTimeWindow>
-		cal = cal || null // Moment with tz
+	/**
+	 * @param timeWindows   List<DateTimeWindow>
+	 * @param cal           Moment with tz
+	 */
+	constructor({timeWindows = [], cal}) {
+		timeWindows = timeWindows || [] // null timeWindows is supported, equivalent to empty timeWindows
 		
 		this._timeWindows = timeWindows
 		this._tz = cal.tz()
@@ -42,7 +45,7 @@ export class DateTimeWindowsIterator {
 				until : null
 			}
 		} else {
-			let nextTimeWindow = this._timeWindows[this._index.index]
+			const nextTimeWindow = this._timeWindows[this._index.index]
 			if (!this._index.isDummyBefore) {
 				result = {
 					status: (nextTimeWindow.available ? Status.STATUS_AVAILABLE : Status.STATUS_UNAVAILABLE),

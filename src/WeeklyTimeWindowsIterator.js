@@ -5,9 +5,12 @@ import {Period} from "./Period"
 import * as WeeklyTimeWindow from "./WeeklyTimeWindow"
 
 export class WeeklyTimeWindowsIterator {
-	constructor({weekly, cal}) {
-		weekly = weekly || [] // List<WeeklyTimeWindow>
-		cal = cal || null // Moment with tz
+	/**
+	 * @param weekly   List<WeeklyTimeWindow>
+	 * @param cal      Moment with tz
+	 */
+	constructor({weekly = [], cal}) {
+		weekly = weekly || [] // null weekly is supported, equivalent to empty weekly
 		
 		this._cal = cal.clone() // "cal" is modified later, this allows the caller to reuse his version of it
 		
@@ -25,7 +28,7 @@ export class WeeklyTimeWindowsIterator {
 		} else {
 			let minuteOfWeek = 0
 			for (let i = 0, l = weekly.length; i < l; ++i) {
-				let timeWindow = weekly[i]
+				const timeWindow = weekly[i]
 				if (timeWindow.minuteOfWeek > minuteOfWeek) {
 					this._timeWindows.push({
 						minuteOfWeek : minuteOfWeek,
@@ -48,8 +51,8 @@ export class WeeklyTimeWindowsIterator {
 				})
 			}
 			
-			let firstWindow = this._timeWindows[0]
-			let lastWindow = this._timeWindows[this._timeWindows.length - 1]
+			const firstWindow = this._timeWindows[0]
+			const lastWindow = this._timeWindows[this._timeWindows.length - 1]
 			this._isFirstAndLastSame = (firstWindow.status === lastWindow.status)
 		}
 		
@@ -79,8 +82,8 @@ export class WeeklyTimeWindowsIterator {
 			}
 		}
 		
-		let minuteOfWeek = this._minutesFromStartOfWeek(this._cal)
-		let currentWindow = this._timeWindows[this._find(minuteOfWeek)]
+		const minuteOfWeek = this._minutesFromStartOfWeek(this._cal)
+		const currentWindow = this._timeWindows[this._find(minuteOfWeek)]
 		let newMinuteOfWeek = this._endMinuteOfWeek(currentWindow)
 		if (newMinuteOfWeek === WeeklyTimeWindow.WEEK) {
 			newMinuteOfWeek = (this._isFirstAndLastSame ? this._endMinuteOfWeek(this._timeWindows[0]) : 0)
@@ -140,8 +143,8 @@ export class WeeklyTimeWindowsIterator {
 		let high = this._timeWindows.length
 		
 		while (low < high) {
-			let mid = (low + high) >>> 1
-			let midValue = this._endMinuteOfWeek(this._timeWindows[mid])
+			const mid = (low + high) >>> 1
+			const midValue = this._endMinuteOfWeek(this._timeWindows[mid])
 			if (midValue <= minuteOfWeek) {
 				low = mid + 1
 			} else {

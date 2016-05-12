@@ -5,10 +5,11 @@ import {DateTimeWindowsIterator} from "./DateTimeWindowsIterator"
 import * as Status from "./Status"
 
 export class TimeWindowsIterator {
-	constructor({availability, cal}) {
-		availability = availability || {} // availability.Availability
-		cal = cal || null // Moment with tz
-		
+	/**
+	 * @param availability   availability.Availability
+	 * @param cal            Moment with tz
+	 */
+	constructor({availability = {}, cal}) {
 		this._regularIt = new WeeklyTimeWindowsIterator({
 			cal: cal,
 			weekly: availability.weekly
@@ -34,7 +35,7 @@ export class TimeWindowsIterator {
 		// Future has no exceptions?
 		if (this._exceptionStatus.status === Status.STATUS_UNKNOWN && !this._exceptionStatus.until) {
 			// Continue with regular statuses
-			let lastRegularStatus = this._regularStatus
+			const lastRegularStatus = this._regularStatus
 			if (this._regularIt.hasNext()) {
 				this._regularStatus = this._regularIt.next()
 			} else {
@@ -53,7 +54,7 @@ export class TimeWindowsIterator {
 				return this._exceptionStatus
 			}
 		
-			let lastExceptionStatus = this._exceptionStatus
+			const lastExceptionStatus = this._exceptionStatus
 			this._exceptionStatus = this._exceptionsIt.next() // we know there are still real exceptions later
 			
 			while ((this._regularStatus.until) && (this._regularStatus.until <= lastExceptionStatus.until)) {
@@ -65,19 +66,19 @@ export class TimeWindowsIterator {
 		
 		// No real exception this time
 		if ((!this._regularStatus.until) || (this._regularStatus.until > this._exceptionStatus.until)) {
-			let lastExceptionStatus = this._exceptionStatus
+			const lastExceptionStatus = this._exceptionStatus
 			this._exceptionStatus = this._exceptionsIt.next() // we know there are still real exceptions later
 			return {
 				status: this._regularStatus.status,
 				until: lastExceptionStatus.until
 			}
 		} else if (this._regularStatus.until < this._exceptionStatus.until) {
-			let lastRegularStatus = this._regularStatus
+			const lastRegularStatus = this._regularStatus
 			this._regularStatus = this._regularIt.next() // we know there are still regular statuses later
 			return lastRegularStatus
 		} else {
 			this._exceptionStatus = this._exceptionsIt.next() // we know there are still real exceptions later
-			let lastRegularStatus = this._regularStatus
+			const lastRegularStatus = this._regularStatus
 			this._regularStatus = this._regularIt.next() // we know there are still regular statuses later
 			return lastRegularStatus
 		}
