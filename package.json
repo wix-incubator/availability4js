@@ -8,7 +8,7 @@
     "compile": "babel -d dist/ src/",
     "prepublish": "npm test && npm run compile",
     "build": ":",
-    "release": "wnpm-release -- --no-shrinkwrap"
+    "release": "npm install @wix/wnpm-ci && wnpm-release -- --no-shrinkwrap"
   },
   "repository": {
     "type": "git",
@@ -41,9 +41,6 @@
     "babel-runtime": "^6.6.1",
     "chai": "^3.5.0",
     "mocha": "^3.0.2"
-  },
-  "optionalDependencies": {
-    "@wix/wnpm-ci": "*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
