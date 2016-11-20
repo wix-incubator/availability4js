@@ -1,13 +1,13 @@
 "use strict"
 
-import {DateTimeWindowsIterator} from "../src/DateTimeWindowsIterator.js"
-import {StatusIteratorTester} from "./StatusIteratorTester.js"
-import {CalendarAdvancer} from "./CalendarAdvancer.js"
-import * as Status from "../src/Status.js"
+import {DateTimeWindowsIterator} from "../src/DateTimeWindowsIterator"
+import {StatusIteratorTester} from "./StatusIteratorTester"
+import {CalendarAdvancer} from "./CalendarAdvancer"
+import * as Status from "../src/Status"
 import moment from 'moment-timezone'
 
-describe("DateTimeWindowsIterator", function() {
-	function createTester({cal, timeWindows}) {
+describe("DateTimeWindowsIterator", () => {
+	const createTester = ({cal, timeWindows}) => {
 		cal = cal || null // Moment with tz
 		timeWindows = timeWindows || null // List<DateTimeWindow>
 
@@ -20,7 +20,7 @@ describe("DateTimeWindowsIterator", function() {
 		})
 	}
 	
-	function toDate(cal) {
+	const toDate = (cal) => {
 		return {
 			year: cal.year(),
 			month: cal.month() + 1,
@@ -31,7 +31,7 @@ describe("DateTimeWindowsIterator", function() {
 	}
 	
 	let advancer = new CalendarAdvancer()
-	function when(startCal, field, amount, available) {
+	const when = (startCal, field, amount, available) => {
 		let endCal = startCal.clone()
 		advancer.advance(endCal, field, amount)
 		return {
@@ -43,7 +43,7 @@ describe("DateTimeWindowsIterator", function() {
 
 	let tz = "Asia/Jerusalem"
 	
-    it ('returns a single unknown status when given null timeWindows', function() {
+    it ('returns a single unknown status when given null timeWindows', () => {
 		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -55,7 +55,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single unknown status when given no time windows', function() {
+    it ('returns a single unknown status when given no time windows', () => {
 		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -67,7 +67,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns two statuses when given a single "since forever" window and pointed in it', function() {
+    it ('returns two statuses when given a single "since forever" window and pointed in it', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let window = when(cal, "day", 1, true)
@@ -83,7 +83,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single status when given a single "until forever" window and pointed to it', function() {
+    it ('returns a single status when given a single "until forever" window and pointed to it', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let window = when(cal, "day", 1, true)
@@ -98,7 +98,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single status when given a single "since forever, until forever" (as null) window and pointed to it', function() {
+    it ('returns a single status when given a single "since forever, until forever" (as null) window and pointed to it', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -114,7 +114,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 
-    it ('returns a single status when given a single "since forever, until forever" (as undefined) window and pointed to it', function() {
+    it ('returns a single status when given a single "since forever, until forever" (as undefined) window and pointed to it', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -128,7 +128,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns two statuses when given a single time window and pointed to its start', function() {
+    it ('returns two statuses when given a single time window and pointed to its start', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -143,7 +143,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns three statuses when given a single time window and pointed to before its start', function() {
+    it ('returns three statuses when given a single time window and pointed to before its start', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let yesterday = cal.clone()
@@ -162,7 +162,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns the correct status when pointed to middle of window', function() {
+    it ('returns the correct status when pointed to middle of window', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let midWindow = cal.clone()
@@ -178,7 +178,7 @@ describe("DateTimeWindowsIterator", function() {
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12)
     })
 	
-    it ('returns 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', function() {
+    it ('returns 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', () => {
 		let cal1 = moment.tz([2010, 12-1, 11, 0, 0, 0, 0], tz)
 		let cal2 = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		let cal3 = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)

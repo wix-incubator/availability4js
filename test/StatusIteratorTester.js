@@ -1,7 +1,7 @@
 "use strict"
 
 import chai from 'chai'
-import {CalendarAdvancer} from './CalendarAdvancer.js'
+import {CalendarAdvancer} from './CalendarAdvancer'
 
 let should = chai.should()
 

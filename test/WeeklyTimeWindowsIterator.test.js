@@ -1,16 +1,16 @@
 "use strict"
 
 import chai from 'chai'
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow.js"
-import {WeeklyTimeWindowsIterator} from "../src/WeeklyTimeWindowsIterator.js"
-import {StatusIteratorTester} from "./StatusIteratorTester.js"
-import * as Status from "../src/Status.js"
+import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow"
+import {WeeklyTimeWindowsIterator} from "../src/WeeklyTimeWindowsIterator"
+import {StatusIteratorTester} from "./StatusIteratorTester"
+import * as Status from "../src/Status"
 import moment from 'moment-timezone'
 
 let should = chai.should()
 
-describe("WeeklyTimeWindowsIterator", function() {
-	function createTester({cal, weekly}) {
+describe("WeeklyTimeWindowsIterator", () => {
+	const createTester = ({cal, weekly}) => {
 		cal = cal || null // Moment with tz
 		weekly = weekly || null // List<DateTimeWindow>
 
@@ -25,7 +25,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 
 	let tz = "Asia/Jerusalem"
 	
-    it ('returns a single available status when given null weekly', function() {
+    it ('returns a single available status when given null weekly', () => {
 		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -37,7 +37,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single available status when given empty weekly', function() {
+    it ('returns a single available status when given empty weekly', () => {
 		let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -49,7 +49,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns an infinite series of statuses for a Sunday-only schedule', function() {
+    it ('returns an infinite series of statuses for a Sunday-only schedule', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -68,7 +68,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		}
     })
 	
-    it ('returns the correct status when starting mid-minute in a Sunday-only schedule', function() {
+    it ('returns the correct status when starting mid-minute in a Sunday-only schedule', () => {
 		let cal = moment.tz([2010, 12-1, 12, 0, 0, 30, 0], tz)
 		
 		let tester = createTester({
@@ -87,7 +87,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
     })
 	
-    it ('returns an infinite series of statuses for a Monday-only schedule', function() {
+    it ('returns an infinite series of statuses for a Monday-only schedule', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -106,7 +106,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		}
     })
 	
-    it ('returns the correct status when pointed to middle of window', function() {
+    it ('returns the correct status when pointed to middle of window', () => {
 		let cal = moment.tz([2010, 12-1, 13, 12, 0, 0, 0], tz)
 		
 		let tester = createTester({
@@ -122,7 +122,7 @@ describe("WeeklyTimeWindowsIterator", function() {
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12)
     })
 	
-    it ('returns an infinite series of statuses for a Monday-Tuesday-Friday schedule', function() {
+    it ('returns an infinite series of statuses for a Monday-Tuesday-Friday schedule', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let tester = createTester({

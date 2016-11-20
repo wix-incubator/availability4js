@@ -1,15 +1,15 @@
 "use strict"
 
 import chai from 'chai'
-import {AvailabilityIterator} from "../src/AvailabilityIterator.js"
-import {StatusIteratorTester} from "./StatusIteratorTester.js"
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow.js"
-import {CalendarAdvancer} from "./CalendarAdvancer.js"
-import * as Status from "../src/Status.js"
+import {AvailabilityIterator} from "../src/AvailabilityIterator"
+import {StatusIteratorTester} from "./StatusIteratorTester"
+import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow"
+import {CalendarAdvancer} from "./CalendarAdvancer"
+import * as Status from "../src/Status"
 import moment from 'moment-timezone'
 
-describe("AvailabilityIterator", function() {
-	function createTester({cal, weekly, exceptions}) {
+describe("AvailabilityIterator", () => {
+	const createTester = ({cal, weekly, exceptions}) => {
 		cal = cal || null // Moment with tz
 		weekly = weekly || null // List<WeeklyTimeWindow>
 		exceptions = exceptions || null // List<DateTimeWindow>
@@ -26,7 +26,7 @@ describe("AvailabilityIterator", function() {
 		})
 	}
 	
-	function toDate(cal) {
+	const toDate = (cal) => {
 		return {
 			year: cal.year(),
 			month: cal.month() + 1,
@@ -37,7 +37,7 @@ describe("AvailabilityIterator", function() {
 	}
 	
 	let advancer = new CalendarAdvancer()
-	function when(startCal, field, amount, available) {
+	const when = (startCal, field, amount, available) => {
 		let endCal = startCal.clone()
 		advancer.advance(endCal, field, amount)
 		return {
@@ -49,7 +49,7 @@ describe("AvailabilityIterator", function() {
 
 	let tz = "Asia/Jerusalem"
 	
-    it ('defaults to treating availability as empty', function() {
+    it ('defaults to treating availability as empty', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let yesterday = cal.clone()
@@ -66,7 +66,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('treats null availability as empty availability', function() {
+    it ('treats null availability as empty availability', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let yesterday = cal.clone()
@@ -84,7 +84,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single status for a full weekly schedule with a redundant exception', function() {
+    it ('returns a single status for a full weekly schedule with a redundant exception', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let yesterday = cal.clone()
@@ -107,7 +107,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns 3 statuses for a full weekly schedule with a non-redundant exception with an end date', function() {
+    it ('returns 3 statuses for a full weekly schedule with a non-redundant exception with an end date', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let yesterday = cal.clone()
@@ -132,7 +132,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a series of statuses for a complex weekly schedule with an exception', function() {
+    it ('returns a series of statuses for a complex weekly schedule with an exception', () => {
 		let cal1 = moment.tz([2010, 12-1, 10, 0, 0, 0, 0], tz)
 		let cal2 = moment.tz([2010, 12-1, 14, 12, 0, 0, 0], tz)
 		
@@ -165,7 +165,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2)
     })
 
-    it ('returns a single status for a full weekly schedule with an exception "until forever"', function() {
+    it ('returns a single status for a full weekly schedule with an exception "until forever"', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 		
 		let ex = when(cal, "day", 1, false)
@@ -181,7 +181,7 @@ describe("AvailabilityIterator", function() {
 		tester.assertDone()
     })
 
-    it ('returns a single status for a partial weekly schedule with an exception "until forever"', function() {
+    it ('returns a single status for a partial weekly schedule with an exception "until forever"', () => {
 		let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
 
 		let ex = when(cal, "day", 1, false)

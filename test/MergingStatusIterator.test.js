@@ -1,16 +1,16 @@
 "use strict"
 
 import chai from 'chai'
-import {MergingStatusIterator} from "../src/MergingStatusIterator.js"
-import {StatusIteratorTester} from "./StatusIteratorTester.js"
-import {StatusListIterator} from "./StatusListIterator.js"
-import * as Status from "../src/Status.js"
+import {MergingStatusIterator} from "../src/MergingStatusIterator"
+import {StatusIteratorTester} from "./StatusIteratorTester"
+import {StatusListIterator} from "./StatusListIterator"
+import * as Status from "../src/Status"
 import moment from 'moment-timezone'
 
 let should = chai.should()
 
-describe("MergingStatusIterator", function() {
-	function createTester({cal, statuses}) {
+describe("MergingStatusIterator", () => {
+	const createTester = ({cal, statuses}) => {
 		cal = cal || null // Moment with tz
 		statuses = statuses || [] // List<Status>
 
@@ -24,7 +24,7 @@ describe("MergingStatusIterator", function() {
 		})
 	}
 	
-    it ('returns a single status when given a single status', function() {
+    it ('returns a single status when given a single status', () => {
 		let tester = createTester({
 			statuses: [
 				{
@@ -38,7 +38,7 @@ describe("MergingStatusIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns two statuses when given two different statuses', function() {
+    it ('returns two statuses when given two different statuses', () => {
 		let cal = moment([2010, 12-1, 15, 0, 0, 0, 0])
 		
 		let tester = createTester({
@@ -60,7 +60,7 @@ describe("MergingStatusIterator", function() {
 		tester.assertDone()
     })
 	
-    it ('returns a single status when given two same statuses', function() {
+    it ('returns a single status when given two same statuses', () => {
 		let cal = moment([2010, 12-1, 15, 0, 0, 0, 0])
 		
 		let tester = createTester({
