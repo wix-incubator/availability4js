@@ -1,6 +1,7 @@
 "use strict"
 
 import moment from 'moment-timezone'
+import _ from 'lodash'
 
 export class Index {
 	/**
@@ -70,4 +71,98 @@ const compare = (timestamp, timeWindow, tz) => {
 	} else {
 		return 0
 	}
+}
+
+/**
+ * Maps each availability.Date to a Long value, for easy comparison.
+ *
+ * @param date      availability.Date
+ * @param isStart   Boolean; Does the date argument represent 'start' or 'end'
+ * @return Long
+ */
+const dateToNum = (date, isStart) => {
+	if (!date) {
+		return (isStart ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY)
+	} else {
+		return date.year * 60 * 60 * 60 * 32 * 366 +
+			date.month * 60 * 60 * 32 +
+			date.day * 60 * 60 +
+			date.hour * 60 +
+			date.minute;
+	}
+}
+
+export const normalize = (timeWindows) => {
+	const separators = _.reduce(timeWindows, (acc, timeWindow) => {
+		if (timeWindow.start) {
+			acc.points.push(timeWindow.start)
+		} else {
+			acc.hasSinceForever = true
+		}
+		if (timeWindow.end) {
+			acc.points.push(timeWindow.end)
+		} else {
+			acc.hasUntilForever = true
+		}
+		
+		return acc
+	}, {
+		hasSinceForever: false,
+		hasUntilForever: false,
+		points: []
+	})
+	
+	const sortedUniquePoints =
+		_(separators.points)
+		.sortBy((point) => { return dateToNum(point, true) })
+		.sortedUniqBy((point) => { return dateToNum(point, true) })
+		.value()
+	
+	// Convert list to sorted non-overlapping windows
+	const normalizedTimeWindows = []
+	if (separators.hasSinceForever) {
+		if (sortedUniquePoints.length > 0) {
+			normalizedTimeWindows.push({
+				start: null,
+				end: sortedUniquePoints[0]
+			})
+		} else if (separators.hasUntilForever) {
+			normalizedTimeWindows.push({
+				start: null,
+				end: null
+			})
+		}
+	}
+	
+	for (let i = 0; i < sortedUniquePoints.length - 1; ++i) {
+		normalizedTimeWindows.push({
+			start: sortedUniquePoints[i],
+			end: sortedUniquePoints[i+1]
+		})
+	}
+	
+	if (separators.hasUntilForever) {
+		if (sortedUniquePoints.length > 0) {
+			normalizedTimeWindows.push({
+				start: sortedUniquePoints[sortedUniquePoints.length - 1],
+				end: null
+			})
+		}
+	}
+	
+	// Assign availability to windows, omit unknowns
+	return _(normalizedTimeWindows)
+		.map((normalizedTimeWindow) => {
+			const normalizedStart = dateToNum(normalizedTimeWindow.start, true)
+			const normalizedEnd = dateToNum(normalizedTimeWindow.end, false)
+			
+			const timeWindow = _.findLast(timeWindows, (timeWindow) => {
+				return (normalizedStart >= dateToNum(timeWindow.start, true)) &&
+					(normalizedEnd <= dateToNum(timeWindow.end, false))
+			})
+			
+			return (timeWindow ? _.assign({available: timeWindow.available}, normalizedTimeWindow) : null)
+		})
+		.compact()
+		.value()
 }

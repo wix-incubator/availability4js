@@ -202,4 +202,25 @@ describe("DateTimeWindowsIterator", () => {
 		tester.assertLastStatus(Status.STATUS_UNKNOWN)
 		tester.assertDone()
     })
+	
+    it ('supports overlapping windows by following the "last one wins" rule', () => {
+		const yesterday = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz)
+		const today = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz)
+		const tomorrow = moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz)
+		
+		const tester = createTester({
+			cal: yesterday,
+			timeWindows: [
+				when(today, "day", 2, false),
+				when(tomorrow, "day", 1, true)
+			]
+		})
+		
+		tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1)
+		tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 0) // TODO: This shouldn't be returned (we chose not to deal with it now as it doesn't really matter)
+		tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1)
+		tester.assertLastStatus(Status.STATUS_UNKNOWN)
+		tester.assertDone()
+    })
 })

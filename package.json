@@ -29,7 +29,8 @@
   },
   "homepage": "https://github.com/wix/availability4js",
   "dependencies": {
-    "moment-timezone": "^0.5.9"
+    "moment-timezone": "^0.5.9",
+	"lodash": "^4.17.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",

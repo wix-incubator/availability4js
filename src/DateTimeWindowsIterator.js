@@ -1,7 +1,7 @@
 "use strict"
 
 import * as Status from "./Status"
-import {Index, findInsertionIndex, getTime} from "./DateTimeWindowsUtils"
+import {Index, findInsertionIndex, getTime, normalize} from "./DateTimeWindowsUtils"
 
 export class DateTimeWindowsIterator {
 	/**
@@ -11,14 +11,14 @@ export class DateTimeWindowsIterator {
 	constructor({timeWindows = [], cal}) {
 		timeWindows = timeWindows || [] // null timeWindows is supported, equivalent to empty timeWindows
 		
-		this._timeWindows = timeWindows
+		this._timeWindows = normalize(timeWindows)
 		this._tz = cal.tz()
 		
 		this._index = null
 		this._lastWindowUntilForever = null
 		if (this._timeWindows.length > 0) {
 			this._index = findInsertionIndex(this._timeWindows, cal.valueOf(), this._tz)
-			this._lastWindowUntilForever = !timeWindows[this._timeWindows.length-1].end
+			this._lastWindowUntilForever = !this._timeWindows[this._timeWindows.length-1].end
 		} else {
 			this._index = new Index(0, true)
 			this._lastWindowUntilForever = false
