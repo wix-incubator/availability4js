@@ -161,7 +161,7 @@ export const normalize = (timeWindows) => {
 					(normalizedEnd <= dateToNum(timeWindow.end, false))
 			})
 			
-			return (timeWindow ? _.assign({available: timeWindow.available, reason: timeWindow.reason, comment: timeWindow.comment}, normalizedTimeWindow) : null)
+			return (timeWindow ? _.defaults(normalizedTimeWindow, timeWindow) : null)
 		})
 		.compact()
 		.value()
