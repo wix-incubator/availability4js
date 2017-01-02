@@ -4,7 +4,8 @@
   "description": "Wix Restaurants Availability Utils Module",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register",
+    "lint": "eslint './src/**/*.js' './test/**/*.js'",
+    "test": "npm run lint && mocha --compilers js:babel-register",
     "compile": "babel -d dist/ src/",
     "prepublish": "npm test && npm run compile",
     "build": ":",
