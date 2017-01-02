@@ -5,11 +5,11 @@ export class InverseTimeWindowsIterator {
         this._it = iterator;
     }
 
-	hasNext() {
-		return this._it.hasNext()
-	}
-	
-	next() {
+    hasNext() {
+        return this._it.hasNext();
+    }
+
+    next() {
         const next = this._it.next();
 
         if (next.status === Status.STATUS_UNAVAILABLE) {
@@ -18,5 +18,5 @@ export class InverseTimeWindowsIterator {
             next.status = Status.STATUS_UNAVAILABLE;
         }
         return next;
-	}
+    }
 }

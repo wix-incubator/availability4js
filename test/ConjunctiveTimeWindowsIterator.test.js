@@ -2,7 +2,6 @@ import {expect} from 'chai';
 import {ConjunctiveTimeWindowsIterator} from "../src/ConjunctiveTimeWindowsIterator";
 import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
 import {AvailabilityIterator} from "../src/AvailabilityIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
 import * as Status from "../src/Status";
 import moment from 'moment-timezone';
 
@@ -31,10 +30,10 @@ describe('ConjunctiveTimeWindowsIterator', () => {
                 durationMins: WeeklyTimeWindow.DAY
             }]
         };
-        
+
         // TODO: Add exceptions
 
-		const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
+        const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
         const timestamp = 1292104800000;
 
         const iterator = new ConjunctiveTimeWindowsIterator({
@@ -62,7 +61,7 @@ describe('ConjunctiveTimeWindowsIterator', () => {
 
     it('works if given null availabilities (returns unavailable always)', () => {
 
-		const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
+        const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
 
         const iterator = new ConjunctiveTimeWindowsIterator({
             iterators: null,
@@ -92,9 +91,8 @@ describe('ConjunctiveTimeWindowsIterator', () => {
                 durationMins: WeeklyTimeWindow.WEEK
             }]
         };
-        
-		const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
-        const timestamp = 1292104800000;
+
+        const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
 
         const iterator = new ConjunctiveTimeWindowsIterator({
             iterators: [availability1, availability2].map(availability => new AvailabilityIterator({availability, cal})),
@@ -124,8 +122,8 @@ describe('ConjunctiveTimeWindowsIterator', () => {
                 durationMins: WeeklyTimeWindow.DAY
             }]
         };
-        
-		const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
+
+        const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
         const timestamp = 1292104800000;
 
         const iterator = new ConjunctiveTimeWindowsIterator({

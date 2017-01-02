@@ -21,7 +21,7 @@ describe('InverseTimeWindowsIterator', () => {
             }]
         };
 
-		const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
+        const cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz); // Sunday
         const timestamp = 1292104800000;
 
         const iterator = new InverseTimeWindowsIterator({
