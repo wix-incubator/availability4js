@@ -1,11 +1,9 @@
 import {expect} from 'chai';
-import {InverseTimeWindowsIterator} from "../src/InverseTimeWindowsIterator";
-import {AvailabilityIterator} from "../src/AvailabilityIterator";
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
-import * as Status from "../src/Status";
+import {InverseTimeWindowsIterator, AvailabilityIterator, Status} from '../src/index';
+import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
 import moment from 'moment-timezone';
 
-const tz = "Asia/Jerusalem";
+const tz = 'Asia/Jerusalem';
 
 describe('InverseTimeWindowsIterator', () => {
 

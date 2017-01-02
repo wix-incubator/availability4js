@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 export class Period {
     constructor({days = 0, hours = 0, minutes = 0}) {

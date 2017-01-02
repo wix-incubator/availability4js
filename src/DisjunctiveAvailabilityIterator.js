@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-import {AvailabilityIterator} from "./AvailabilityIterator";
-import {MergingStatusIterator} from "./MergingStatusIterator";
-import {strictlyBefore} from "./DateTimeWindowsUtils";
+import {AvailabilityIterator} from './AvailabilityIterator';
+import {MergingStatusIterator} from './MergingStatusIterator';
+import {strictlyBefore} from './DateTimeWindowsUtils';
 
 export class UnmergedDisjunctiveTimeWindowsIterator {
 	/**
@@ -54,7 +54,7 @@ export class UnmergedDisjunctiveTimeWindowsIterator {
             }
 
             if (wrapped.nextStatus !== null) {
-                if (wrapped.nextStatus.status === "available") {
+                if (wrapped.nextStatus.status === 'available') {
                     this._now = wrapped.nextStatus.until;
                     this._nextStatus = wrapped.nextStatus;
                     return;
@@ -68,7 +68,7 @@ export class UnmergedDisjunctiveTimeWindowsIterator {
 
         this._now = earliestUnavailableUntil;
         this._nextStatus = {
-            status: "unavailable",
+            status: 'unavailable',
             until: earliestUnavailableUntil
         };
     }

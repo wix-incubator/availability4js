@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import moment from 'moment-timezone';
 import _ from 'lodash';

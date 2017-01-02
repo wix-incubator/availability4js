@@ -1,13 +1,12 @@
-"use strict";
+'use strict';
 
-import {DisjunctiveAvailabilityIterator} from "../src/DisjunctiveAvailabilityIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
-import {CalendarAdvancer} from "./CalendarAdvancer";
-import * as Status from "../src/Status";
+import {DisjunctiveAvailabilityIterator, Status} from '../src/index';
+import {StatusIteratorTester} from './StatusIteratorTester';
+import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
+import {CalendarAdvancer} from './CalendarAdvancer';
 import moment from 'moment-timezone';
 
-describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () => {
+describe('DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator', () => {
     const createTester = ({cal, availabilities}) => {
         return new StatusIteratorTester({
             it: new DisjunctiveAvailabilityIterator({
@@ -39,13 +38,13 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         };
     };
 
-    let tz = "Asia/Jerusalem";
+    let tz = 'Asia/Jerusalem';
 
     it ('defaults to treating availabilities as empty array', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday
@@ -59,7 +58,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             availabilities: null,
@@ -74,7 +73,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -84,7 +83,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
                     durationMins: WeeklyTimeWindow.WEEK
                 }],
                 exceptions: [
-                    when(cal, "day", 1, true)
+                    when(cal, 'day', 1, true)
                 ]
             }]
         });
@@ -97,7 +96,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -107,13 +106,13 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
                     durationMins: WeeklyTimeWindow.WEEK
                 }],
                 exceptions: [
-                    when(cal, "day", 1, false)
+                    when(cal, 'day', 1, false)
                 ]
             }]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_AVAILABLE);
         tester.assertDone();
     });
@@ -134,28 +133,28 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
                     durationMins: 2 * WeeklyTimeWindow.DAY
                 }],
                 exceptions: [
-                    when(cal2, "hour", 12, false)
+                    when(cal2, 'hour', 12, false)
                 ]
 
             }]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "hour", 12);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 3);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 2);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'hour', 12);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'hour', 12);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 3);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 2);
     });
 
     it ('returns a single status for a full weekly schedule with an exception "until forever"', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
-        let ex = when(cal, "day", 1, false);
+        let ex = when(cal, 'day', 1, false);
         ex.end = null;
 
         let tester = createTester({
@@ -173,7 +172,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
     it ('returns a single status for a partial weekly schedule with an exception "until forever"', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
-        let ex = when(cal, "day", 1, false);
+        let ex = when(cal, 'day', 1, false);
         ex.end = null;
 
         let tester = createTester({
@@ -197,7 +196,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -240,8 +239,8 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         });
 
         for (let i = 0; i < 100; ++i) {
-            tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 6);
-            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
+            tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 6);
+            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         }
     });
 
@@ -249,7 +248,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -300,7 +299,7 @@ describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () =>
 
 		// Until this class supports this really complex scenario, we make an effort to return some meaningful result.
 		// The correct behavior is described in the commented out lines that follow.
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1002);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1002);
 
 //		tester.assertLastStatus(Status.STATUS_AVAILABLE)
 //		tester.assertDone()

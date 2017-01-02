@@ -52,6 +52,7 @@
         "no-trailing-spaces": 2,
         "no-unused-vars": 2,
         "no-undef": 2,
+        "quotes": ["error", "single"],
         "semi": 2,
         "indent": ["error", 4]
     }

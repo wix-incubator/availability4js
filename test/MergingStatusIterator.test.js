@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-import {MergingStatusIterator} from "../src/MergingStatusIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
-import {StatusListIterator} from "./StatusListIterator";
-import * as Status from "../src/Status";
+import {MergingStatusIterator} from '../src/MergingStatusIterator';
+import {StatusIteratorTester} from './StatusIteratorTester';
+import {StatusListIterator} from './StatusListIterator';
+import * as Status from '../src/Status';
 import moment from 'moment-timezone';
 
-describe("MergingStatusIterator", () => {
+describe('MergingStatusIterator', () => {
     const createTester = ({cal, statuses}) => {
         cal = cal || null; // Moment with tz
         statuses = statuses || []; // List<Status>
@@ -52,7 +52,7 @@ describe("MergingStatusIterator", () => {
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 0);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 0);
         tester.assertLastStatus(Status.STATUS_AVAILABLE);
         tester.assertDone();
     });

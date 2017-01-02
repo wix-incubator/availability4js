@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 import {expect} from 'chai';
-import {normalize} from "../src/DateTimeWindowsUtils";
-import {CalendarAdvancer} from "./CalendarAdvancer";
+import {normalize} from '../src/DateTimeWindowsUtils';
+import {CalendarAdvancer} from './CalendarAdvancer';
 import moment from 'moment-timezone';
 
-describe ("DateTimeWindowsUtils", () => {
-    describe("normalize", () => {
+describe ('DateTimeWindowsUtils', () => {
+    describe('normalize', () => {
         const toDate = (cal) => {
             return {
                 year: cal.year(),
@@ -28,7 +28,7 @@ describe ("DateTimeWindowsUtils", () => {
             };
         };
 
-        let tz = "Asia/Jerusalem";
+        let tz = 'Asia/Jerusalem';
 
         it ('leaves an empty list as-is', () => {
             const normalized = normalize([]);
@@ -38,35 +38,35 @@ describe ("DateTimeWindowsUtils", () => {
 
         it ('leaves a singleton list as-is', () => {
             const normalized = normalize([
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, true)
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, true)
             ]);
 
             expect(normalized).to.deep.equal([
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, true)
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, true)
             ]);
         });
 
         it ('orders time windows first to last', () => {
             const normalized = normalize([
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, true),
-                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), "day", 1, true)
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, true),
+                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), 'day', 1, true)
             ]);
 
             expect(normalized).to.deep.equal([
-                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), "day", 1, true),
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, true)
+                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), 'day', 1, true),
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, true)
             ]);
         });
 
         it ('resolves overlapping windows by following the "last one wins" rule', () => {
             const normalized = normalize([
-                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), "day", 2, true),
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, false)
+                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), 'day', 2, true),
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, false)
             ]);
 
             expect(normalized).to.deep.equal([
-                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), "day", 1, true),
-                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), "day", 1, false)
+                when(moment.tz([2010, 12-1, 14, 0, 0, 0, 0], tz), 'day', 1, true),
+                when(moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz), 'day', 1, false)
             ]);
         });
     });

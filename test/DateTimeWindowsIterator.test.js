@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-import {DateTimeWindowsIterator} from "../src/DateTimeWindowsIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
-import {CalendarAdvancer} from "./CalendarAdvancer";
-import * as Status from "../src/Status";
+import {DateTimeWindowsIterator} from '../src/DateTimeWindowsIterator';
+import {StatusIteratorTester} from './StatusIteratorTester';
+import {CalendarAdvancer} from './CalendarAdvancer';
+import * as Status from '../src/Status';
 import moment from 'moment-timezone';
 
-describe("DateTimeWindowsIterator", () => {
+describe('DateTimeWindowsIterator', () => {
     const createTester = ({cal, timeWindows}) => {
         cal = cal || null; // Moment with tz
         timeWindows = timeWindows || null; // List<DateTimeWindow>
@@ -41,7 +41,7 @@ describe("DateTimeWindowsIterator", () => {
         };
     };
 
-    let tz = "Asia/Jerusalem";
+    let tz = 'Asia/Jerusalem';
 
     it ('returns a single unknown status when given null timeWindows', () => {
         let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
@@ -70,7 +70,7 @@ describe("DateTimeWindowsIterator", () => {
     it ('returns two statuses when given a single "since forever" window and pointed in it', () => {
         let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 
-        let window = when(cal, "day", 1, true);
+        let window = when(cal, 'day', 1, true);
         window.start = null;
 
         let tester = createTester({
@@ -78,7 +78,7 @@ describe("DateTimeWindowsIterator", () => {
             timeWindows: [ window ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_UNKNOWN);
         tester.assertDone();
     });
@@ -86,7 +86,7 @@ describe("DateTimeWindowsIterator", () => {
     it ('returns a single status when given a single "until forever" window and pointed to it', () => {
         let cal = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
 
-        let window = when(cal, "day", 1, true);
+        let window = when(cal, 'day', 1, true);
         window.end = null;
 
         let tester = createTester({
@@ -134,11 +134,11 @@ describe("DateTimeWindowsIterator", () => {
         let tester = createTester({
             cal: cal,
             timeWindows: [
-                when(cal, "day", 1, true)
+                when(cal, 'day', 1, true)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_UNKNOWN);
         tester.assertDone();
     });
@@ -147,17 +147,17 @@ describe("DateTimeWindowsIterator", () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
             timeWindows: [
-                when(cal, "day", 1, false)
+                when(cal, 'day', 1, false)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_UNKNOWN, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_UNKNOWN);
         tester.assertDone();
     });
@@ -166,16 +166,16 @@ describe("DateTimeWindowsIterator", () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let midWindow = cal.clone();
-        advancer.advance(midWindow, "hour", 12);
+        advancer.advance(midWindow, 'hour', 12);
 
         let tester = createTester({
             cal: midWindow,
             timeWindows: [
-                when(cal, "day", 1, true)
+                when(cal, 'day', 1, true)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'hour', 12);
     });
 
     it ('returns 5 statuses when given 3 separate windows, and pointed to between 1st and 2nd', () => {
@@ -184,21 +184,21 @@ describe("DateTimeWindowsIterator", () => {
         let cal3 = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
 
         let tomorrow = cal1.clone();
-        advancer.advance(tomorrow, "day", 1);
+        advancer.advance(tomorrow, 'day', 1);
 
         let tester = createTester({
             cal: tomorrow,
             timeWindows: [
-                when(cal1, "day", 1, true),
-                when(cal2, "day", 1, false),
-                when(cal3, "day", 1, true)
+                when(cal1, 'day', 1, true),
+                when(cal2, 'day', 1, false),
+                when(cal3, 'day', 1, true)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 1);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_UNKNOWN, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNKNOWN, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_UNKNOWN);
         tester.assertDone();
     });
@@ -211,15 +211,15 @@ describe("DateTimeWindowsIterator", () => {
         const tester = createTester({
             cal: yesterday,
             timeWindows: [
-                when(today, "day", 2, false),
-                when(tomorrow, "day", 1, true)
+                when(today, 'day', 2, false),
+                when(tomorrow, 'day', 1, true)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNKNOWN, "day", 0); // TODO: This shouldn't be returned (we chose not to deal with it now as it doesn't really matter)
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_UNKNOWN, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNKNOWN, 'day', 0); // TODO: This shouldn't be returned (we chose not to deal with it now as it doesn't really matter)
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_UNKNOWN);
         tester.assertDone();
     });

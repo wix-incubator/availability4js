@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import * as Status from "./Status";
-import {Index, findInsertionIndex, getTime, normalize} from "./DateTimeWindowsUtils";
+import * as Status from './Status';
+import {Index, findInsertionIndex, getTime, normalize} from './DateTimeWindowsUtils';
 
 export class DateTimeWindowsIterator {
 	/**

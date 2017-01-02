@@ -1,11 +1,9 @@
 import {expect} from 'chai';
-import {ConjunctiveTimeWindowsIterator} from "../src/ConjunctiveTimeWindowsIterator";
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
-import {AvailabilityIterator} from "../src/AvailabilityIterator";
-import * as Status from "../src/Status";
+import {ConjunctiveTimeWindowsIterator, Status, AvailabilityIterator} from '../src/index';
+import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
 import moment from 'moment-timezone';
 
-const tz = "Asia/Jerusalem";
+const tz = 'Asia/Jerusalem';
 
 describe('ConjunctiveTimeWindowsIterator', () => {
 

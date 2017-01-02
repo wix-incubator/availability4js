@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-import {AvailabilityIterator} from "../src/AvailabilityIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
-import {CalendarAdvancer} from "./CalendarAdvancer";
-import * as Status from "../src/Status";
+import {AvailabilityIterator} from '../src/AvailabilityIterator';
+import {StatusIteratorTester} from './StatusIteratorTester';
+import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
+import {CalendarAdvancer} from './CalendarAdvancer';
+import * as Status from '../src/Status';
 import moment from 'moment-timezone';
 
-describe("AvailabilityIterator", () => {
+describe('AvailabilityIterator', () => {
     const createTester = ({cal, weekly, exceptions}) => {
         cal = cal || null; // Moment with tz
         weekly = weekly || null; // List<WeeklyTimeWindow>
@@ -46,13 +46,13 @@ describe("AvailabilityIterator", () => {
         };
     };
 
-    let tz = "Asia/Jerusalem";
+    let tz = 'Asia/Jerusalem';
 
     it ('defaults to treating availability as empty', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         const tester = new StatusIteratorTester({
             it: new AvailabilityIterator({
@@ -69,7 +69,7 @@ describe("AvailabilityIterator", () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         const tester = new StatusIteratorTester({
             it: new AvailabilityIterator({
@@ -87,7 +87,7 @@ describe("AvailabilityIterator", () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -98,7 +98,7 @@ describe("AvailabilityIterator", () => {
                 }
             ],
             exceptions: [
-                when(cal, "day", 1, true)
+                when(cal, 'day', 1, true)
             ]
         });
 
@@ -110,7 +110,7 @@ describe("AvailabilityIterator", () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
         let yesterday = cal.clone();
-        advancer.advance(yesterday, "day", -1);
+        advancer.advance(yesterday, 'day', -1);
 
         let tester = createTester({
             cal: yesterday,
@@ -121,12 +121,12 @@ describe("AvailabilityIterator", () => {
                 }
             ],
             exceptions: [
-                when(cal, "day", 1, false)
+                when(cal, 'day', 1, false)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_AVAILABLE);
         tester.assertDone();
     });
@@ -148,26 +148,26 @@ describe("AvailabilityIterator", () => {
                 }
             ],
             exceptions: [
-                when(cal2, "hour", 12, false)
+                when(cal2, 'hour', 12, false)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "hour", 12);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 3);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 2);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'hour', 12);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'hour', 12);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 3);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 2);
     });
 
     it ('returns a single status for a full weekly schedule with an exception "until forever"', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
-        let ex = when(cal, "day", 1, false);
+        let ex = when(cal, 'day', 1, false);
         ex.end = null;
 
         let tester = createTester({
@@ -183,7 +183,7 @@ describe("AvailabilityIterator", () => {
     it ('returns a single status for a partial weekly schedule with an exception "until forever"', () => {
         let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
-        let ex = when(cal, "day", 1, false);
+        let ex = when(cal, 'day', 1, false);
         ex.end = null;
 
         let tester = createTester({
@@ -215,13 +215,13 @@ describe("AvailabilityIterator", () => {
                 }
             ],
             exceptions: [
-                when(today, "day", 2, false),
-                when(tomorrow, "day", 1, true)
+                when(today, 'day', 2, false),
+                when(tomorrow, 'day', 1, true)
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+        tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_AVAILABLE);
         tester.assertDone();
     });

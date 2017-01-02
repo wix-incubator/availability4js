@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-import * as Status from "./Status";
-import {Period} from "./Period";
-import * as WeeklyTimeWindow from "./WeeklyTimeWindow";
+import * as Status from './Status';
+import {Period} from './Period';
+import * as WeeklyTimeWindow from './WeeklyTimeWindow';
 
 export class WeeklyTimeWindowsIterator {
 	/**

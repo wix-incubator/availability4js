@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-import * as WeeklyTimeWindow from "../src/WeeklyTimeWindow";
-import {WeeklyTimeWindowsIterator} from "../src/WeeklyTimeWindowsIterator";
-import {StatusIteratorTester} from "./StatusIteratorTester";
-import * as Status from "../src/Status";
+import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
+import {WeeklyTimeWindowsIterator} from '../src/WeeklyTimeWindowsIterator';
+import {StatusIteratorTester} from './StatusIteratorTester';
+import * as Status from '../src/Status';
 import moment from 'moment-timezone';
 
-describe("WeeklyTimeWindowsIterator", () => {
+describe('WeeklyTimeWindowsIterator', () => {
     const createTester = ({cal, weekly}) => {
         cal = cal || null; // Moment with tz
         weekly = weekly || null; // List<DateTimeWindow>
@@ -20,7 +20,7 @@ describe("WeeklyTimeWindowsIterator", () => {
         });
     };
 
-    let tz = "Asia/Jerusalem";
+    let tz = 'Asia/Jerusalem';
 
     it ('returns a single available status when given null weekly', () => {
         let cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
@@ -60,8 +60,8 @@ describe("WeeklyTimeWindowsIterator", () => {
         });
 
         for (let i = 0, l = 100; i < l; ++i) {
-            tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6);
+            tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 6);
         }
     });
 
@@ -81,7 +81,7 @@ describe("WeeklyTimeWindowsIterator", () => {
         let calNoSeconds = moment.tz([2010, 12-1, 12, 0, 0, 0, 0], tz);
         tester.setCal(calNoSeconds);
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
     });
 
     it ('returns an infinite series of statuses for a Monday-only schedule', () => {
@@ -98,8 +98,8 @@ describe("WeeklyTimeWindowsIterator", () => {
         });
 
         for (let i = 0, l = 100; i < l; ++i) {
-            tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 6);
+            tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 6);
         }
     });
 
@@ -116,7 +116,7 @@ describe("WeeklyTimeWindowsIterator", () => {
             ]
         });
 
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, "hour", 12);
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'hour', 12);
     });
 
     it ('returns an infinite series of statuses for a Monday-Tuesday-Friday schedule', () => {
@@ -137,10 +137,10 @@ describe("WeeklyTimeWindowsIterator", () => {
         });
 
         for (let i = 0, l = 100; i < l; ++i) {
-            tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 2);
-            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
-            tester.assertNextStatus(Status.STATUS_AVAILABLE, "day", 1);
-            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, "day", 2);
+            tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 2);
+            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 2);
+            tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
+            tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 2);
         }
     });
 });

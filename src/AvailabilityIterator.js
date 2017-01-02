@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import {MergingStatusIterator} from "./MergingStatusIterator";
-import {TimeWindowsIterator} from "./TimeWindowsIterator";
+import {MergingStatusIterator} from './MergingStatusIterator';
+import {TimeWindowsIterator} from './TimeWindowsIterator';
 
 export class AvailabilityIterator {
 	/**
