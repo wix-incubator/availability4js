@@ -8,7 +8,7 @@ import {CalendarAdvancer} from "./CalendarAdvancer"
 import * as Status from "../src/Status"
 import moment from 'moment-timezone'
 
-describe("DisjunctiveAvailabilityIterator", () => {
+describe("DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator", () => {
 	const createTester = ({cal, availabilities}) => {
 		return new StatusIteratorTester({
 			it: new DisjunctiveAvailabilityIterator({

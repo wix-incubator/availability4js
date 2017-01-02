@@ -4,18 +4,17 @@ import {AvailabilityIterator} from "./AvailabilityIterator"
 import {MergingStatusIterator} from "./MergingStatusIterator"
 import {strictlyBefore} from "./DateTimeWindowsUtils"
 
-export class DisjunctiveTimeWindowsIterator {
+export class UnmergedDisjunctiveTimeWindowsIterator {
 	/**
 	 * @param availabilities   List<availability.Availability>
 	 * @param cal              Moment with tz
 	 */
-	constructor({availabilities = [], cal}) {
+	constructor({iterators = [], cal}) {
 		this._now = cal.valueOf()
 		this._nextStatus = null
 
 		this._wrapped = []
-		availabilities.forEach(availability => {
-			const it = new AvailabilityIterator({availability, cal})
+		iterators.forEach(it => {
 			this._wrapped.push({
 				it: it,
 				nextStatus: it.next() // There's always at least one status
@@ -75,6 +74,26 @@ export class DisjunctiveTimeWindowsIterator {
 	}
 }
 
+export class DisjunctiveTimeWindowsIterator {
+
+	constructor({iterators = [], cal}) {
+        this._it = new MergingStatusIterator({
+            it: new UnmergedDisjunctiveTimeWindowsIterator({iterators, cal}),
+            maxIterations: 1000
+        });
+    }
+
+	/** @return Boolean */
+	hasNext() {
+		return this._it.hasNext()
+	}
+	
+	/** @return Status */
+	next() {
+		return this._it.next()
+	}
+}
+
 export class DisjunctiveAvailabilityIterator {
 	/**
 	 * @param availabilities   List<availability.Availability>
@@ -82,11 +101,10 @@ export class DisjunctiveAvailabilityIterator {
 	 */
 	constructor({availabilities = [], cal}) {
 		availabilities = availabilities || [] // null availabilities are treated as empty array
+
+        const iterators = availabilities.map(availability => new AvailabilityIterator({availability, cal}));
 		
-		this._it = new MergingStatusIterator({
-			it: new DisjunctiveTimeWindowsIterator({availabilities, cal}),
-			maxIterations: 1000
-		})
+		this._it = new DisjunctiveTimeWindowsIterator({iterators, cal});
 	}
 	
 	/** @return Boolean */
