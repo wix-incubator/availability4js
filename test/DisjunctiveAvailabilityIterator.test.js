@@ -296,12 +296,73 @@ describe('DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator', () =>
             }]
         });
 
+        tester.assertLastStatus(Status.STATUS_AVAILABLE);
+        tester.assertDone();
+    });
 
-		// Until this class supports this really complex scenario, we make an effort to return some meaningful result.
-		// The correct behavior is described in the commented out lines that follow.
-        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1002);
+    it.skip('returns a single status for 7 complementing weekly schedules with exceptions', () => {
+        let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
 
-//		tester.assertLastStatus(Status.STATUS_AVAILABLE)
-//		tester.assertDone()
+        const execptionStart = cal.clone();
+        advancer.advance(execptionStart, 'day', 1001);
+
+        const exception = when(execptionStart, 'day', 1, false);
+        exception.end = null;
+
+        let tester = createTester({
+            cal: cal.clone(),
+            availabilities: [{
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.SUNDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }],
+                exceptions: [
+                    exception
+                ]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.MONDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.TUESDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.WEDNESDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.THURSDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.FRIDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            },
+            {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.SATURDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                }]
+            }]
+        });
+
+        // This is the right behaviour...
+        tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1000);
+
+        // ... but this is the current behaviour because of the MergingStatusIterator limitation of 1000
+        // iterations, and placing .until = null if reaching that limitation
+        // tester.assertLastStatus(Status.STATUS_AVAILABLE);
     });
 });

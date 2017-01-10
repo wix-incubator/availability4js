@@ -1,9 +1,7 @@
 'use strict';
 
-import chai from 'chai';
+import {expect} from 'chai';
 import {CalendarAdvancer} from './CalendarAdvancer';
-
-let should = chai.should();
 
 export class StatusIteratorTester {
     constructor({it, cal}) {
@@ -28,25 +26,25 @@ export class StatusIteratorTester {
 	 * @param amount   Integer
 	 */
     assertNextStatus(status, field, amount) {
-        this._it.hasNext().should.be.true;
+        expect(this._it.hasNext()).to.be.true;
         let actualStatus = this._it.next();
-        actualStatus.status.should.equal(status);
-        actualStatus.until.should.not.equal(null);
+        expect(actualStatus.status).to.equal(status);
+        expect(actualStatus.until).to.not.be.null;
         this._advancer.advance(this._cal, field, amount);
-        actualStatus.until.should.equal(this._cal.valueOf());
+        expect(actualStatus.until).to.equal(this._cal.valueOf());
     }
 
 	/**
 	  * @param status   String
 	  */
     assertLastStatus(status) {
-        this._it.hasNext().should.be.true;
+        expect(this._it.hasNext()).to.be.true;
         let actualStatus = this._it.next();
-        actualStatus.status.should.equal(status);
-        should.equal(actualStatus.until, null);
+        expect(actualStatus.status).to.equal(status);
+        expect(actualStatus.until).to.be.null;
     }
 
     assertDone() {
-        this._it.hasNext().should.be.false;
+        expect(this._it.hasNext()).to.be.false;
     }
 }

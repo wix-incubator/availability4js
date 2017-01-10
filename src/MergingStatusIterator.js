@@ -32,6 +32,14 @@ export class MergingStatusIterator {
             mergedStatus.until = this._nextStatus.until;
 
             if ((this._maxIterations !== null) && (iteration++ >= this._maxIterations)) {
+
+                // TODO: Patch. Without this a DisjunctiveTimeWindowsIterator using a DisjunctiveTimeWindowsIterator, both
+                // using a MergingStatusIterator with a maxIterations of 1000, take a ***** very ***** long time to run (since
+                // the external MergingStatusIterator will run 1000 of the internal's 1000.
+                //
+                // Solution: DisjunctiveTimeWindowsIterator v2.
+                mergedStatus.until = null;
+                this._nextStatus = null;
                 break;
             }
         }

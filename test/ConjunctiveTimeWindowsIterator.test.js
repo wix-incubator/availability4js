@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {ConjunctiveTimeWindowsIterator, Status, AvailabilityIterator} from '../src/index';
+import {ConjunctiveTimeWindowsIterator, DisjunctiveTimeWindowsIterator, InverseTimeWindowsIterator, Status, AvailabilityIterator} from '../src/index';
 import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
 import moment from 'moment-timezone';
 
@@ -145,5 +145,55 @@ describe('ConjunctiveTimeWindowsIterator', () => {
         expect(val.status).to.equal(Status.STATUS_UNAVAILABLE);
         expect(val.until).to.equal(timestamp + 8 * 1000 * 60 * 60 * 24); // Monday
         expect(iterator.hasNext()).to.be.true;
+    });
+
+    it('Tests a specific situation', () => {
+        let cal = moment();
+
+        const availabilities = [{
+            'weekly': [{
+                'minuteOfWeek': 0,
+                'durationMins': 1425
+            }, {
+                'minuteOfWeek': 1440,
+                'durationMins': 8640
+            }]
+        }, {
+            'weekly': [{
+                'minuteOfWeek': 0,
+                'durationMins': 1440
+            }, {
+                'minuteOfWeek': 8640,
+                'durationMins': 1440
+            }]
+        }];
+
+        const it = new DisjunctiveTimeWindowsIterator({
+            iterators: availabilities.map(availability => new AvailabilityIterator({availability, cal:cal.clone()})),
+            cal: cal.clone()
+        });
+
+        const it2 = new InverseTimeWindowsIterator({
+            iterator: it
+        });
+
+        const it3 = new InverseTimeWindowsIterator({
+            iterator: new AvailabilityIterator({availability:{}, cal:cal.clone()})
+        });
+
+        const it4 = new DisjunctiveTimeWindowsIterator({
+            iterators: [it2, it3],
+            cal: cal.clone()
+        });
+
+        console.log(it4.next());
+
+        /*
+        var it = new ConjunctiveTimeWindowsIterator({
+            iterators: [iterator, new AvailabilityIterator({ availability: {}, cal: cal.clone() })],
+            cal: cal.clone()
+        });
+        */
+
     });
 });
