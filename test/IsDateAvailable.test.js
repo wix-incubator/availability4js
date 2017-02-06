@@ -72,6 +72,21 @@ describe('isDateAvailable', () => {
         assert.isFalse(result);
     });
 
+    it('always unavailable', () => {
+        //Given
+        const unavailableOnMonday = {
+            exceptions: [{
+                available: false
+            }]
+        };
+
+        //When
+        const result = isDateAvailable(monday, unavailableOnMonday);
+
+        //Then
+        assert.isFalse(result);
+    });
+
     function occasionTimeToExceptionTime(time) {
         return {
             year   : time.year(),
