@@ -1,5 +1,3 @@
-import {AvailabilityIterator} from './AvailabilityIterator';
-
 export default function isDateAvailable(cal, iterator) {
     while (iterator.hasNext()) {
         const cur = iterator.next();
