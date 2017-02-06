@@ -13,3 +13,4 @@ export {DisjunctiveTimeWindowsIterator as DisjunctiveTimeWindowsIterator};
 export {ConjunctiveTimeWindowsIterator as ConjunctiveTimeWindowsIterator};
 export {InverseTimeWindowsIterator as InverseTimeWindowsIterator};
 export {Status as Status};
+export {default as isDateAvailable} from './IsDateAvailable';
