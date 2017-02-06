@@ -49,7 +49,7 @@ describe('isDateAvailable', () => {
         };
 
         //When
-        const result = isDateAvailable(moment('2016-04-04'), availableOnMonday);
+        const result = isDateAvailable(monday, availableOnMonday);
 
         //Then
         assert.isTrue(result);
@@ -59,14 +59,14 @@ describe('isDateAvailable', () => {
         //Given
         const unavailableOnMonday = {
             exceptions: [{
-                start: occasionTimeToExceptionTime(moment('2016-04-04')),
-                end: occasionTimeToExceptionTime(moment('2016-04-04 23:59:59')),
+                start: occasionTimeToExceptionTime(monday),
+                end: occasionTimeToExceptionTime(moment('2016-04-05')),
                 available: false
             }]
         };
 
         //When
-        const result = isDateAvailable(moment('2016-04-04 13:00:00'), unavailableOnMonday);
+        const result = isDateAvailable(monday.clone().add(6, 'm'), unavailableOnMonday);
 
         //Then
         assert.isFalse(result);

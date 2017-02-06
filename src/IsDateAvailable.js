@@ -1,7 +1,7 @@
 import {AvailabilityIterator} from './AvailabilityIterator';
 
 export default function isDateAvailable(cal, availability) {
-    const iterator = new AvailabilityIterator({ cal, availability });
+    const iterator = new AvailabilityIterator({ cal: cal.clone(), availability });
 
     while (iterator.hasNext()) {
         const cur = iterator.next();
