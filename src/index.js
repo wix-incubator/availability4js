@@ -1,16 +1,9 @@
 'use strict';
+import * as Status from './iterators/Status';
 
-import {AvailabilityIterator} from './AvailabilityIterator';
-import {DisjunctiveAvailabilityIterator} from './DisjunctiveAvailabilityIterator';
-import {DisjunctiveTimeWindowsIterator} from './DisjunctiveAvailabilityIterator';
-import {ConjunctiveTimeWindowsIterator} from './ConjunctiveTimeWindowsIterator';
-import {InverseTimeWindowsIterator} from './InverseTimeWindowsIterator';
-import * as Status from './Status';
-
-export {AvailabilityIterator as AvailabilityIterator};
-export {DisjunctiveAvailabilityIterator as DisjunctiveAvailabilityIterator};
-export {DisjunctiveTimeWindowsIterator as DisjunctiveTimeWindowsIterator};
-export {ConjunctiveTimeWindowsIterator as ConjunctiveTimeWindowsIterator};
-export {InverseTimeWindowsIterator as InverseTimeWindowsIterator};
-export {Status as Status};
-export {default as isDateAvailable} from './IsDateAvailable';
+export {AvailabilityIterator} from './iterators/AvailabilityIterator';
+export {DisjunctiveAvailabilityIterator, DisjunctiveTimeWindowsIterator} from './iterators/DisjunctiveAvailabilityIterator';
+export {ConjunctiveTimeWindowsIterator} from './iterators/ConjunctiveTimeWindowsIterator';
+export {InverseTimeWindowsIterator} from './iterators/InverseTimeWindowsIterator';
+export {Status};
+export {default as isDateAvailable} from './utils/IsDateAvailable';

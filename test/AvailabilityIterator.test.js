@@ -1,10 +1,10 @@
 'use strict';
 
-import {AvailabilityIterator} from '../src/AvailabilityIterator';
+import {AvailabilityIterator} from '../src/index';
 import {StatusIteratorTester} from './StatusIteratorTester';
-import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
+import * as WeeklyTimeWindow from '../src/iterators/WeeklyTimeWindow';
 import {CalendarAdvancer} from './CalendarAdvancer';
-import * as Status from '../src/Status';
+import {Status} from '../src/index';
 import moment from 'moment-timezone';
 
 describe('AvailabilityIterator', () => {

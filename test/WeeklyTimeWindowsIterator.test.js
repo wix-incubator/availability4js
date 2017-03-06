@@ -1,9 +1,9 @@
 'use strict';
 
-import * as WeeklyTimeWindow from '../src/WeeklyTimeWindow';
-import {WeeklyTimeWindowsIterator} from '../src/WeeklyTimeWindowsIterator';
+import * as WeeklyTimeWindow from '../src/iterators/WeeklyTimeWindow';
+import {WeeklyTimeWindowsIterator} from '../src/iterators/WeeklyTimeWindowsIterator';
 import {StatusIteratorTester} from './StatusIteratorTester';
-import * as Status from '../src/Status';
+import {Status} from '../src/index';
 import moment from 'moment-timezone';
 
 describe('WeeklyTimeWindowsIterator', () => {

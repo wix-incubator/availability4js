@@ -1,4 +1,4 @@
-import AvailabilityIterator from './AvailabilityIterator';
+import {AvailabilityIterator} from '../iterators/AvailabilityIterator';
 
 export default function isDateAvailable(cal, availability) {
     const iterator = new AvailabilityIterator({ cal, availability });

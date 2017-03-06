@@ -1,9 +1,9 @@
 'use strict';
 
-import {DateTimeWindowsIterator} from '../src/DateTimeWindowsIterator';
+import {DateTimeWindowsIterator} from '../src/iterators/DateTimeWindowsIterator';
 import {StatusIteratorTester} from './StatusIteratorTester';
 import {CalendarAdvancer} from './CalendarAdvancer';
-import * as Status from '../src/Status';
+import {Status} from '../src/index';
 import moment from 'moment-timezone';
 
 describe('DateTimeWindowsIterator', () => {
