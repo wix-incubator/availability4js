@@ -1,6 +1,10 @@
 import {AvailabilityIterator, DisjunctiveTimeWindowsIterator, ConjunctiveTimeWindowsIterator} from '../index';
+import isAvailabilityObject from './isAvailabilityObject';
 
 export function iter(availability) {
+    if (!isAvailabilityObject(availability))
+        return availability;
+
     return cal => {
         return new AvailabilityIterator({
             availability,
@@ -45,10 +49,6 @@ function toIterators(objects, cal) {
 
         throw 'cannot compose unknown object';
     });
-}
-
-function isAvailabilityObject(obj) {
-    return !obj || obj.weekly || obj.exceptions || Object.keys(obj).length === 0;
 }
 
 function normalizeArgs(a) {

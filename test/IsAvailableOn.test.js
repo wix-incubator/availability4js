@@ -4,18 +4,20 @@ import {assert} from 'chai';
 import momentToExceptionTime from './momentToExceptionTime';
 
 describe('isAvailableOn', () => {
-    let iterator;
+    let iterator, availability;
 
     beforeEach(() => {
         const {iter} = iteratorFactory;
 
-        iterator = iter({
+        availability = {
             exceptions: [{
                 available: false,
                 start: momentToExceptionTime(moment('2016-04-03')),
                 end: momentToExceptionTime(moment('2016-04-04'))
             }]
-        });
+        };
+
+        iterator = iter(availability);
     });
 
     it('available', () => {
@@ -26,6 +28,12 @@ describe('isAvailableOn', () => {
 
     it('unavailable', () => {
         const result = isAvailableOn(iterator, moment('2016-04-03 14:00:00'));
+
+        assert.isFalse(result);
+    });
+
+    it('can pass an availability object', () => {
+        const result = isAvailableOn(availability, moment('2016-04-03 14:00:00'));
 
         assert.isFalse(result);
     });

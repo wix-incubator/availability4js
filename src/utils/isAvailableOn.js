@@ -1,5 +1,7 @@
-export default function isAvailableOn(getIterator, cal) {
-    const iterator = getIterator(cal);
+import {iter} from './iteratorFactory';
+
+export default function isAvailableOn(obj, cal) {
+    const iterator = iter(obj)(cal);
 
     if (!iterator.hasNext())
         return false;
