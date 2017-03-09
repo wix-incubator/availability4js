@@ -125,4 +125,46 @@ describe('iteratorFactory', () => {
             }]
         });
     });
+
+    it('conjunct with null', () => {
+        //Given
+        const availability = {weekly: [{minuteOfWeek: 5, durationMins: 10}]};
+        const cal = '2016-04-03';
+        const result = conjunct(null, availability)(cal);
+
+        assert.deepEqual(result, {
+            type: 'ConjunctiveIterator',
+            cal,
+            iterators: [{
+                type: 'AvailabilityIterator',
+                cal,
+                availability: null
+            }, {
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }]
+        });
+    });
+
+    it('disjunct with null', () => {
+        //Given
+        const availability = {weekly: [{minuteOfWeek: 5, durationMins: 10}]};
+        const cal = '2016-04-03';
+        const result = disjunct(null, availability)(cal);
+
+        assert.deepEqual(result, {
+            type: 'DisjunctiveIterator',
+            cal,
+            iterators: [{
+                type: 'AvailabilityIterator',
+                cal,
+                availability: null
+            }, {
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }]
+        });
+    });
 });

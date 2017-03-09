@@ -48,7 +48,7 @@ function toIterators(objects, cal) {
 }
 
 function isAvailabilityObject(obj) {
-    return obj.weekly || obj.exceptions || Object.keys(obj).length === 0;
+    return !obj || obj.weekly || obj.exceptions || Object.keys(obj).length === 0;
 }
 
 function normalizeArgs(a) {
