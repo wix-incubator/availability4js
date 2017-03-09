@@ -8,5 +8,5 @@ export default function getEarliestAvailableTime(iterator, from) {
 
     const status = iterator.next();
 
-    return status.status === "available" ? from.unix() * 1000 : status.until;
+    return status.status === 'available' ? from.unix() * 1000 : status.until;
 }
