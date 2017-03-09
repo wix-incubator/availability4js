@@ -1,4 +1,6 @@
-export default function isAvailableOn(iterator) {
+export default function isAvailableOn(getIterator, cal) {
+    const iterator = getIterator(cal);
+
     if (!iterator.hasNext())
         return false;
 
