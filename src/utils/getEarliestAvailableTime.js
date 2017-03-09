@@ -1,7 +1,3 @@
-import { DisjunctiveAvailabilityIterator } from '../iterators/DisjunctiveAvailabilityIterator';
-import { AvailabilityIterator } from '../iterators/AvailabilityIterator';
-import { ConjunctiveTimeWindowsIterator } from '../iterators/ConjunctiveTimeWindowsIterator';
-
 export default function getEarliestAvailableTime(iterator, from) {
     if (!iterator.hasNext()) {
         return {

@@ -1,4 +1,4 @@
-export default function isAvailableOn(iterator, moment) {
+export default function isAvailableOn(iterator) {
     if (!iterator.hasNext())
         return false;
 
