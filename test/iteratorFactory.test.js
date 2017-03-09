@@ -73,4 +73,56 @@ describe('iteratorFactory', () => {
             cal
         });
     });
+
+    it('can disjunct availability objects directly', () => {
+        //Given
+        const availability = {weekly: [{}]};
+        const getIter = disjunct(availability, availability);
+
+        const cal = '2016-04-3';
+
+        //When
+        const composedIter = getIter(cal);
+
+        //Then
+        assert.deepEqual(composedIter, {
+            type: 'DisjunctiveIterator',
+            cal,
+            iterators: [{
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }, {
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }]
+        });
+    });
+
+    it('can conjunct availability objects directly', () => {
+        //Given
+        const availability = {weekly: [{}]};
+        const getIter = conjunct(availability, availability);
+
+        const cal = '2016-04-3';
+
+        //When
+        const composedIter = getIter(cal);
+
+        //Then
+        assert.deepEqual(composedIter, {
+            type: 'ConjunctiveIterator',
+            cal,
+            iterators: [{
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }, {
+                type: 'AvailabilityIterator',
+                cal,
+                availability
+            }]
+        });
+    });
 });
