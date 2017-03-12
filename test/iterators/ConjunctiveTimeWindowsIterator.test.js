@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {ConjunctiveTimeWindowsIterator, DisjunctiveTimeWindowsIterator, InverseTimeWindowsIterator, Status, AvailabilityIterator} from '../src/index';
-import * as WeeklyTimeWindow from '../src/iterators/WeeklyTimeWindow';
+import {ConjunctiveTimeWindowsIterator, DisjunctiveTimeWindowsIterator, InverseTimeWindowsIterator, Status, AvailabilityIterator} from '../../src/index';
+import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
 import moment from 'moment-timezone';
 
 const tz = 'Asia/Jerusalem';

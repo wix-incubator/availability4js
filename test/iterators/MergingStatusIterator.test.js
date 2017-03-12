@@ -1,9 +1,9 @@
 'use strict';
 
-import {MergingStatusIterator} from '../src/iterators/MergingStatusIterator';
+import {MergingStatusIterator} from '../../src/iterators/MergingStatusIterator';
 import {StatusIteratorTester} from './StatusIteratorTester';
 import {StatusListIterator} from './StatusListIterator';
-import {Status} from '../src/index';
+import {Status} from '../../src/index';
 import moment from 'moment-timezone';
 
 describe('MergingStatusIterator', () => {

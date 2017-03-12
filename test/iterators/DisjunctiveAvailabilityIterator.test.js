@@ -1,8 +1,8 @@
 'use strict';
 
-import {DisjunctiveAvailabilityIterator, Status} from '../src/index';
+import {DisjunctiveAvailabilityIterator, Status} from '../../src/index';
 import {StatusIteratorTester} from './StatusIteratorTester';
-import * as WeeklyTimeWindow from '../src/iterators/WeeklyTimeWindow';
+import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
 import {CalendarAdvancer} from './CalendarAdvancer';
 import moment from 'moment-timezone';
 

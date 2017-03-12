@@ -1,7 +1,7 @@
 'use strict';
 
 import {expect} from 'chai';
-import {normalize} from '../src/iterators/DateTimeWindowsUtils';
+import {normalize} from '../../src/iterators/DateTimeWindowsUtils';
 import {CalendarAdvancer} from './CalendarAdvancer';
 import moment from 'moment-timezone';
 

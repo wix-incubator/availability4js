@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint './src/**/*.js' './test/**/*.js'",
-    "test": "mocha --compilers js:babel-register && npm run lint",
-    "test:watch": "mocha --watch --compilers js:babel-register",
+    "test": "mocha --compilers js:babel-register 'test/**/*.test.js' && npm run lint",
+    "test:watch": "mocha --watch --compilers js:babel-register 'test/**/*.test.js'",
     "compile": "babel -d dist/ src/",
     "prepublish": "npm test && npm run compile",
     "build": ":",
