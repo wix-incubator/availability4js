@@ -74,6 +74,36 @@ describe('iteratorFactory', () => {
         });
     });
 
+    it('disjunct and conjunct with null weekly', () => {
+        //Given
+        const av = {weekly: null};
+        const getIter = disjunct(iter(av), conjunct(iter(av)));
+
+        const cal = '2016-04-3';
+
+        //When
+        const composedIter = getIter(cal);
+
+        //Then
+        assert.deepEqual(composedIter, {
+            type: 'DisjunctiveIterator',
+            iterators: [{
+                type: 'AvailabilityIterator',
+                availability: av,
+                cal
+            }, {
+                type: 'ConjunctiveIterator',
+                iterators: [{
+                    availability: av,
+                    type: 'AvailabilityIterator',
+                    cal
+                }],
+                cal
+            }],
+            cal
+        });
+    });
+
     it('can disjunct availability objects directly', () => {
         //Given
         const availability = {weekly: [{}]};
