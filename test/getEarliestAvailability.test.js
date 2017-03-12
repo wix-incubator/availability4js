@@ -1,4 +1,4 @@
-import { AvailabilityIterator } from '../src/iterators/AvailabilityIterator';
+import {iter} from '../src/utils/iteratorFactory';
 import {getEarliestAvailableTime} from '../src/index';
 import momentToExceptionTime from './momentToExceptionTime';
 import moment from 'moment-timezone';
@@ -16,19 +16,16 @@ describe('getEarliestAvailableTime', () => {
         const start = momentToExceptionTime(from.add(-1, 'm'));
         const end = momentToExceptionTime(from.add(1, 'm'));
 
-        const iterator = new AvailabilityIterator({
-            cal: from,
-            availability: {
-                exceptions: [{
-                    available: true,
-                    start,
-                    end
-                }]
-            }
+        const it = iter({
+            exceptions: [{
+                available: true,
+                start,
+                end
+            }]
         });
 
         //When
-        const result = getEarliestAvailableTime(iterator, from);
+        const result = getEarliestAvailableTime(it, from);
 
         //Then
         assert.equal(result, from.unix() * 1000);
@@ -41,9 +38,7 @@ describe('getEarliestAvailableTime', () => {
         const start = momentToExceptionTime(from.clone().add(3, 'd'));
         const end = momentToExceptionTime(from.clone().add(4, 'd'));
 
-        const iterator = new AvailabilityIterator({
-            cal: from,
-            availability: {
+        const iterator = iter({
                 weekly: [{
                     minuteOfWeek: 10070,
                     durationMins: 5
@@ -53,8 +48,7 @@ describe('getEarliestAvailableTime', () => {
                     start,
                     end
                 }]
-            }
-        });
+            });
 
         //When
         const result = getEarliestAvailableTime(iterator, from);

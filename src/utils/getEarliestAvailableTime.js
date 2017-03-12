@@ -1,9 +1,10 @@
-export default function getEarliestAvailableTime(iterator, from) {
+import {iter} from './iteratorFactory';
+
+export default function getEarliestAvailableTime(obj, from) {
+    const iterator = iter(obj)(from);
+
     if (!iterator.hasNext()) {
-        return {
-            available: false,
-            until: null
-        };
+        return null;
     }
 
     const status = iterator.next();
