@@ -1,4 +1,4 @@
-import {isAvailableOn, iteratorFactory} from '../src/index';
+import {isAvailableOn, iteratorFactory} from '../../src/index';
 import moment from 'moment';
 import {assert} from 'chai';
 import momentToExceptionTime from './momentToExceptionTime';
@@ -21,7 +21,7 @@ describe('isAvailableOn', () => {
     });
 
     it('available', () => {
-        const result = isAvailableOn(iterator, moment('2016-4-6'));
+        const result = isAvailableOn(iterator, moment('2016-04-06'));
 
         assert.isTrue(result);
     });

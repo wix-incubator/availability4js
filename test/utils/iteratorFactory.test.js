@@ -2,7 +2,7 @@ import proxyquire from 'proxyquire';
 import {assert} from 'chai';
 
 describe('iteratorFactory', () => {
-    const index = proxyquire('../src/index', {
+    const index = proxyquire('../../src/index', {
         '../index': {
             AvailabilityIterator: ({availability, cal}) => ({ type: 'AvailabilityIterator', availability, cal}),
             DisjunctiveTimeWindowsIterator: ({iterators, cal}) => ({type: 'DisjunctiveIterator', iterators, cal}),

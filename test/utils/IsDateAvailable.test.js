@@ -1,4 +1,4 @@
-import {isDateAvailable, AvailabilityIterator} from '../src/index';
+import {isDateAvailable, AvailabilityIterator} from '../../src/index';
 import moment from 'moment-timezone';
 import {assert} from 'chai';
 

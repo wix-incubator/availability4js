@@ -1,16 +1,20 @@
-import {isAlwaysAvailable, AvailabilityIterator} from '../src/index';
+import {isNeverAvailable, AvailabilityIterator} from '../../src/index';
 import moment from 'moment';
 import {assert} from 'chai';
 import momentToExceptionTime from './momentToExceptionTime';
 
-describe('isAlwaysAvailable', () => {
-    it('always available', () => {
+describe('isNeverAvailable', () => {
+    it('never available', () => {
         const iter = new AvailabilityIterator({
-            availability: {},
+            availability: {
+                exceptions: [{
+                    available: false
+                }]
+            },
             cal: moment()
         });
 
-        const result = isAlwaysAvailable(iter);
+        const result = isNeverAvailable(iter);
 
         assert.isTrue(result);
     });
@@ -27,7 +31,7 @@ describe('isAlwaysAvailable', () => {
             cal: moment()
         });
 
-        const result = isAlwaysAvailable(iter);
+        const result = isNeverAvailable(iter);
 
         assert.isFalse(result);
     });

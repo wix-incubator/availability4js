@@ -1,5 +1,5 @@
-import {iter} from '../src/utils/iteratorFactory';
-import {getEarliestAvailableTime} from '../src/index';
+import {iter} from '../../src/utils/iteratorFactory';
+import {getEarliestAvailableTime} from '../../src/index';
 import momentToExceptionTime from './momentToExceptionTime';
 import moment from 'moment-timezone';
 import {assert} from 'chai';
