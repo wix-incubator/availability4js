@@ -39,16 +39,16 @@ describe('getEarliestAvailableTime', () => {
         const end = momentToExceptionTime(from.clone().add(4, 'd'));
 
         const iterator = iter({
-                weekly: [{
-                    minuteOfWeek: 10070,
-                    durationMins: 5
-                }],
-                exceptions: [{
-                    available: true,
-                    start,
-                    end
-                }]
-            });
+            weekly: [{
+                minuteOfWeek: 10070,
+                durationMins: 5
+            }],
+            exceptions: [{
+                available: true,
+                start,
+                end
+            }]
+        });
 
         //When
         const result = getEarliestAvailableTime(iterator, from);
