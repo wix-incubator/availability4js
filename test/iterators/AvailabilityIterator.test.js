@@ -1,5 +1,5 @@
 'use strict';
-
+import {expect} from 'chai';
 import {AvailabilityIterator} from '../../src/index';
 import {StatusIteratorTester} from './StatusIteratorTester';
 import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
@@ -224,5 +224,29 @@ describe('AvailabilityIterator', () => {
         tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 1);
         tester.assertLastStatus(Status.STATUS_AVAILABLE);
         tester.assertDone();
+    });
+
+    it('handles daylight saving times correctly', () => {
+        const today = moment.tz([2017, 3-1, 19, 0, 0, 0, 0], tz);
+
+        const tester = new AvailabilityIterator({
+            availability: {
+                weekly: [{
+                    minuteOfWeek: WeeklyTimeWindow.SUNDAY + (5 * 60),
+                    durationMins: WeeklyTimeWindow.HOUR
+                }],
+                exceptions: []
+            },
+            cal: today
+        });
+
+        let next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('5');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('6');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('5');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('6');
     });
 });

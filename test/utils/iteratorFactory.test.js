@@ -1,5 +1,6 @@
 import proxyquire from 'proxyquire';
-import {assert} from 'chai';
+import {assert, expect} from 'chai';
+import moment from 'moment-timezone';
 
 describe('iteratorFactory', () => {
     const index = proxyquire('../../src/index', {
@@ -11,6 +12,7 @@ describe('iteratorFactory', () => {
         }
     });
 
+    const tz = 'Asia/Jerusalem';
     const factory = index.iteratorFactory;
     const {iter, conjunct, disjunct} = factory;
 
@@ -196,5 +198,23 @@ describe('iteratorFactory', () => {
                 availability
             }]
         });
+    });
+
+    it('conjunct with daylight saving', () => {
+        //Given
+        const { iteratorFactory } = require('../../src/index');
+        const { conjunct, disjunct } = iteratorFactory;
+        const availability = {weekly: [{minuteOfWeek: 5 * 60, durationMins: 60}]};
+        const cal = moment.tz('2017-03-19', tz);
+        const tester = disjunct(availability, conjunct(availability, availability))(cal);
+
+        let next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('5');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('6');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('5');
+        next = tester.next();
+        expect(moment.tz(next.until, tz).format('H')).to.equal('6');
     });
 });
