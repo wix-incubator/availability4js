@@ -12,4 +12,5 @@ export {default as isAlwaysAvailable} from './utils/IsAlwaysAvailable';
 export {default as isNeverAvailable} from './utils/IsNeverAvailable';
 export {default as getEarliestAvailableTime} from './utils/getEarliestAvailableTime';
 export {default as isAvailableOn} from './utils/isAvailableOn';
+export {default as intersectWeeklyAvailabilities} from './utils/intersectWeeklyAvailabilities';
 export {iteratorFactory};
