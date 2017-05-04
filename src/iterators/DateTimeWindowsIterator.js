@@ -2,6 +2,7 @@
 
 import * as Status from './Status';
 import {Index, findInsertionIndex, getTime, normalize} from './DateTimeWindowsUtils';
+import _ from 'lodash';
 
 export class DateTimeWindowsIterator {
 	/**
@@ -10,6 +11,12 @@ export class DateTimeWindowsIterator {
 	 */
     constructor({timeWindows = [], cal}) {
         timeWindows = timeWindows || []; // null timeWindows is supported, equivalent to empty timeWindows
+
+        const calValue = cal.valueOf();
+        timeWindows = _.filter(timeWindows, win => {
+            const endTime = getTime(win.end, this._tz);
+            return endTime === null || endTime > calValue;
+        });
 
         this._timeWindows = normalize(timeWindows);
         this._tz = cal.tz();

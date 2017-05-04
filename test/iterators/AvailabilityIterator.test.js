@@ -6,6 +6,7 @@ import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
 import {CalendarAdvancer} from './CalendarAdvancer';
 import {Status} from '../../src/index';
 import moment from 'moment-timezone';
+import _ from 'lodash';
 
 describe('AvailabilityIterator', () => {
     const createTester = ({cal, weekly, exceptions}) => {
@@ -248,5 +249,34 @@ describe('AvailabilityIterator', () => {
         expect(moment.tz(next.until, tz).format('H')).to.equal('5');
         next = tester.next();
         expect(moment.tz(next.until, tz).format('H')).to.equal('6');
+    });
+
+    it('performs well when given many past exceptions', () => {
+        let cal = moment.tz([2010, 12-1, 13, 0, 0, 0, 0], tz);
+
+        let yesterday = cal.clone();
+        advancer.advance(yesterday, 'day', -1);
+
+        // Create 10,000 past exceptions
+        const exceptions = _.map(_.range(1, 10000), d => {
+            let c = cal.clone();
+            advancer.advance(c, 'month', -50000 + d);
+            return when(c, 'day', 1, false);
+        });
+
+        // Run the test, and measure the time it takes it
+        const start = new Date().getTime();
+        createTester({
+            cal: yesterday,
+            weekly: [{
+                minuteOfWeek: WeeklyTimeWindow.SUNDAY,
+                durationMins: WeeklyTimeWindow.WEEK
+            }],
+            exceptions
+        });
+        const time = new Date().getTime() - start;
+
+        // Shouldn't be more than 50ms on all computers
+        expect(time).to.be.below(200);
     });
 });

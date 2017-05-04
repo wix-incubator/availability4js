@@ -9,6 +9,9 @@ export class CalendarAdvancer {
         case 'day':
             cal.date(cal.date() + amount);
             break;
+        case 'month':
+            cal.month(cal.month() + amount);
+            break;
         default:
             throw new Error('Unsupported field: ' + field);
         }
