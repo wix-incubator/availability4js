@@ -276,7 +276,7 @@ describe('AvailabilityIterator', () => {
         });
         const time = new Date().getTime() - start;
 
-        // Shouldn't be more than 50ms on all computers
+        // Shouldn't be more than 200ms on all computers
         expect(time).to.be.below(200);
     });
 });
