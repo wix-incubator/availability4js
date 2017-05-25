@@ -194,6 +194,81 @@ describe('ConjunctiveTimeWindowsIterator', () => {
             cal: cal.clone()
         });
         */
+    });
 
+    it('Test another specific situation with an available event and a different timezone', () => {
+        const availabilities = [{
+            weekly: [{
+                minuteOfWeek: 2430, // open: Mon, 16:30 for two hours
+                durationMins: 120
+            }, {
+                minuteOfWeek: 6750, // open: Thursday, 16:30 for two hours
+                durationMins: 120
+            }],
+            exceptions: [{ // But also open Tuesday, 30th May 2017, at 16:30 for two hours
+                start: {
+                    year: 2017,
+                    month: 5,
+                    day: 30,
+                    hour: 16,
+                    minute: 30
+                },
+                end: {
+                    year: 2017,
+                    month: 5,
+                    day: 30,
+                    hour: 18,
+                    minute: 30
+                },
+                available: true,
+            }]
+        }, {
+            weekly: [{
+                minuteOfWeek: 0,
+                durationMins: 10080
+            }],
+            exceptions: [{
+                start: {
+                    year: 2017,
+                    month: 5,
+                    day: 28,
+                    hour: 23,
+                    minute:59
+                },
+                end: {
+                    year: 2017,
+                    month: 5,
+                    day: 29,
+                    hour: 23,
+                    minute: 59
+                },
+                available: false,
+            }]
+        }];
+
+        {
+            const cal = moment.tz([2017, 4, 30, 18, 0, 0, 0], tz);
+
+            const it = new ConjunctiveTimeWindowsIterator({
+                iterators: availabilities.map(availability => new AvailabilityIterator({availability, cal:cal})),
+                cal: cal
+            });
+
+            const next = it.next();
+
+            expect(next.status).to.equal('available');
+        }
+        {
+            const cal = moment.tz([2017, 4, 30, 18, 0, 0, 0], 'America/New_York');
+
+            const it = new ConjunctiveTimeWindowsIterator({
+                iterators: availabilities.map(availability => new AvailabilityIterator({availability, cal:cal})),
+                cal: cal
+            });
+
+            const next = it.next();
+
+            expect(next.status).to.equal('available');
+        }
     });
 });

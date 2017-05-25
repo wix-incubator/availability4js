@@ -10,6 +10,7 @@ export class DateTimeWindowsIterator {
 	 * @param cal           Moment with tz
 	 */
     constructor({timeWindows = [], cal}) {
+        this._tz = cal.tz();
         timeWindows = timeWindows || []; // null timeWindows is supported, equivalent to empty timeWindows
 
         const calValue = cal.valueOf();
@@ -19,7 +20,6 @@ export class DateTimeWindowsIterator {
         });
 
         this._timeWindows = normalize(timeWindows);
-        this._tz = cal.tz();
 
         this._index = null;
         this._lastWindowUntilForever = null;

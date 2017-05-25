@@ -365,4 +365,23 @@ describe('DisjunctiveAvailabilityIterator/DisjunctiveTimeWindowsIterator', () =>
         // iterations, and placing .until = null if reaching that limitation
         // tester.assertLastStatus(Status.STATUS_AVAILABLE);
     });
+
+    it('performs well when given a complex request', () => {
+
+        const availabilities = [
+            { 'weekly': [] },
+            { 'weekly': [{ 'minuteOfWeek': 375, 'durationMins': 7905 }] },
+            { 'weekly': [{ 'minuteOfWeek': 375, 'durationMins': 1065 }, { 'minuteOfWeek': 1815, 'durationMins': 1065 }, { 'minuteOfWeek': 3255, 'durationMins': 1065 }, { 'minuteOfWeek': 4695, 'durationMins': 1065 }, { 'minuteOfWeek': 6135, 'durationMins': 1065 }, { 'minuteOfWeek': 7575, 'durationMins': 705 }] },
+            { 'weekly': [{ 'minuteOfWeek': 0, 'durationMins': 405 }, { 'minuteOfWeek': 8280, 'durationMins': 1800 }] },
+        ];
+
+        const cal = moment(1494915296618).tz('Asia/Jerusalem');
+
+        let tester = createTester({
+            cal: cal.clone(),
+            availabilities
+        });
+
+        tester.assertLastStatus(Status.STATUS_AVAILABLE);
+    });
 });
