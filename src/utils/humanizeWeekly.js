@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
+import * as WeeklyTimeWindow from '../iterators/WeeklyTimeWindow';
 
 const normalize = weekly => {
     if (weekly.length < 2) {
