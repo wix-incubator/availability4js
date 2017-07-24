@@ -1,5 +1,3 @@
-'use strict';
-
 import {MergingStatusIterator} from './MergingStatusIterator';
 import {TimeWindowsIterator} from './TimeWindowsIterator';
 

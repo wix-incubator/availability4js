@@ -1,5 +1,3 @@
-'use strict';
-
 export class MergingStatusIterator {
     /**
      * @param it              Iterator<Status>

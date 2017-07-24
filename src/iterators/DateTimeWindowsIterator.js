@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Status from './Status';
 import {Index, findInsertionIndex, getTime, normalize} from './DateTimeWindowsUtils';
 import _ from 'lodash';

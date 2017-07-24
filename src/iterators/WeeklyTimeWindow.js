@@ -1,5 +1,3 @@
-'use strict';
-
 export const HOUR = 60;
 export const DAY  = HOUR * 24;
 export const WEEK = DAY  * 7;

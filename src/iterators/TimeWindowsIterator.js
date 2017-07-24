@@ -1,5 +1,3 @@
-'use strict';
-
 import {WeeklyTimeWindowsIterator} from './WeeklyTimeWindowsIterator';
 import {DateTimeWindowsIterator} from './DateTimeWindowsIterator';
 import * as Status from './Status';

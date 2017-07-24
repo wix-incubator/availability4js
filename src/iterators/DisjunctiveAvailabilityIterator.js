@@ -1,5 +1,3 @@
-'use strict';
-
 import {AvailabilityIterator} from './AvailabilityIterator';
 import {MergingStatusIterator} from './MergingStatusIterator';
 import {strictlyBefore} from './DateTimeWindowsUtils';
