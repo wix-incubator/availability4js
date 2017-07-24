@@ -147,56 +147,7 @@ describe('ConjunctiveTimeWindowsIterator', () => {
         expect(iterator.hasNext()).to.be.true;
     });
 
-    it('Tests a specific situation', () => {
-        let cal = moment();
-
-        const availabilities = [{
-            'weekly': [{
-                'minuteOfWeek': 0,
-                'durationMins': 1425
-            }, {
-                'minuteOfWeek': 1440,
-                'durationMins': 8640
-            }]
-        }, {
-            'weekly': [{
-                'minuteOfWeek': 0,
-                'durationMins': 1440
-            }, {
-                'minuteOfWeek': 8640,
-                'durationMins': 1440
-            }]
-        }];
-
-        const it = new DisjunctiveTimeWindowsIterator({
-            iterators: availabilities.map(availability => new AvailabilityIterator({availability, cal:cal.clone()})),
-            cal: cal.clone()
-        });
-
-        const it2 = new InverseTimeWindowsIterator({
-            iterator: it
-        });
-
-        const it3 = new InverseTimeWindowsIterator({
-            iterator: new AvailabilityIterator({availability:{}, cal:cal.clone()})
-        });
-
-        const it4 = new DisjunctiveTimeWindowsIterator({
-            iterators: [it2, it3],
-            cal: cal.clone()
-        });
-
-        //console.log(it4.next());
-
-        /*
-        var it = new ConjunctiveTimeWindowsIterator({
-            iterators: [iterator, new AvailabilityIterator({ availability: {}, cal: cal.clone() })],
-            cal: cal.clone()
-        });
-        */
-    });
-
-    it('Test another specific situation with an available event and a different timezone', () => {
+    it('handles a specific situation with an available event and a different timezone', () => {
         const availabilities = [{
             weekly: [{
                 minuteOfWeek: 2430, // open: Mon, 16:30 for two hours
