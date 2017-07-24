@@ -81,4 +81,27 @@ describe('humanizeWeekly', () => {
             }
         }]);
     });
+
+    it('handles long (>24h) windows', () => {
+        // Sun 8AM - Mon 8PM
+        const weekly = [{
+            minuteOfWeek: WeeklyTimeWindow.SUNDAY + 8 * WeeklyTimeWindow.HOUR,
+            durationMins: 36 * WeeklyTimeWindow.HOUR
+        }];
+
+        expect(humanizeWeekly(weekly)).to.deep.equal([{
+            days: [0],
+            window: {
+                minuteOfDay: 8 * WeeklyTimeWindow.HOUR,
+                durationMins: (24 - 8) * WeeklyTimeWindow.HOUR
+            }
+        },
+        {
+            days: [1],
+            window: {
+                minuteOfDay: 0 * WeeklyTimeWindow.HOUR,
+                durationMins: (20 - 0) * WeeklyTimeWindow.HOUR
+            }
+        }]);
+    });
 });
