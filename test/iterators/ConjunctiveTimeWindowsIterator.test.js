@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {ConjunctiveTimeWindowsIterator, DisjunctiveTimeWindowsIterator, InverseTimeWindowsIterator, Status, AvailabilityIterator} from '../../src/index';
+import {ConjunctiveTimeWindowsIterator, Status, AvailabilityIterator} from '../../src/index';
 import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
 import moment from 'moment-timezone';
 
