@@ -186,7 +186,7 @@ describe('ConjunctiveTimeWindowsIterator', () => {
             cal: cal.clone()
         });
 
-        console.log(it4.next());
+        //console.log(it4.next());
 
         /*
         var it = new ConjunctiveTimeWindowsIterator({
