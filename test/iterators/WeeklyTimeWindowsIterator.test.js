@@ -152,7 +152,11 @@ describe('WeeklyTimeWindowsIterator', () => {
         //   Sunday, October 15, 2017, 01:00:00 local daylight time instead.
         const today = moment.tz([2017, 10-1, 14, 0, 0, 0, 0], 'America/Sao_Paulo');
         const tomorrow = moment.tz([2017, 10-1, 15, 0, 0, 0, 0], 'America/Sao_Paulo');
+        const alsoTomorrow = moment.tz([2017, 10-1, 15, 1, 0, 0, 0], 'America/Sao_Paulo');
         //const dayAfterTomorrow = moment.tz([2017, 10-1, 16, 0, 0, 0, 0], 'America/Sao_Paulo');
+
+        // Sanity: verify DST start
+        expect(tomorrow.valueOf()).to.equal(alsoTomorrow.valueOf());
 
         const it = new WeeklyTimeWindowsIterator({
             weekly: [
