@@ -176,4 +176,34 @@ describe('WeeklyTimeWindowsIterator', () => {
         expect(status2.until).to.equal(dayAfterTomorrow.valueOf());
         */
     });
+
+    it ('handles DST (end / backward)', () => {
+        // Clock Changes in São Paulo, São Paulo, Brazil in 2017
+        //   When local daylight time was about to reach
+        //   Sunday, February 19, 2017, 00:00:00 clocks were turned backward 1 hour to
+        //   Saturday, February 18, 2017, 23:00:00 local standard time instead.
+        const today = moment.tz([2017, 2-1, 18, 0, 0, 0, 0], 'America/Sao_Paulo');
+        const tomorrow = moment.tz([2017, 2-1, 19, 0, 0, 0, 0], 'America/Sao_Paulo');
+        const dayAfterTomorrow = moment.tz([2017, 2-1, 20, 0, 0, 0, 0], 'America/Sao_Paulo');
+
+        const it = new WeeklyTimeWindowsIterator({
+            weekly: [
+                {
+                    minuteOfWeek: WeeklyTimeWindow.MONDAY,
+                    durationMins: 6 * WeeklyTimeWindow.DAY
+                }
+            ],
+            cal: today
+        });
+
+        expect(it.hasNext()).to.be.true;
+        const status1 = it.next();
+        expect(status1.status).to.equal(Status.STATUS_AVAILABLE);
+        expect(status1.until).to.equal(tomorrow.valueOf());
+
+        expect(it.hasNext()).to.be.true;
+        const status2 = it.next();
+        expect(status2.status).to.equal(Status.STATUS_UNAVAILABLE);
+        expect(status2.until).to.equal(dayAfterTomorrow.valueOf());
+    });
 });
