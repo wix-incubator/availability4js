@@ -1,6 +1,7 @@
 'use strict';
 
 import * as WeeklyTimeWindow from '../../src/iterators/WeeklyTimeWindow';
+import {expect} from 'chai';
 import {WeeklyTimeWindowsIterator} from '../../src/iterators/WeeklyTimeWindowsIterator';
 import {StatusIteratorTester} from './StatusIteratorTester';
 import {Status} from '../../src/index';
@@ -142,5 +143,25 @@ describe('WeeklyTimeWindowsIterator', () => {
             tester.assertNextStatus(Status.STATUS_AVAILABLE, 'day', 1);
             tester.assertNextStatus(Status.STATUS_UNAVAILABLE, 'day', 2);
         }
+    });
+
+    it ('handles DST (forward)', () => {
+        const today = moment.tz([2017, 10-1, 14, 0, 0, 0, 0], 'America/Sao_Paulo');
+        const tomorrow = moment.tz([2017, 10-1, 15, 0, 0, 0, 0], 'America/Sao_Paulo');
+
+        const it = new WeeklyTimeWindowsIterator({
+            weekly: [
+                {
+                    minuteOfWeek: WeeklyTimeWindow.MONDAY,
+                    durationMins: 6 * WeeklyTimeWindow.DAY
+                }
+            ],
+            cal: today
+        });
+
+        expect(it.hasNext()).to.be.true;
+        const status = it.next();
+        expect(status.status).to.equal(Status.STATUS_AVAILABLE);
+        expect(status.until).to.equal(tomorrow.valueOf());
     });
 });

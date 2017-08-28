@@ -113,11 +113,11 @@ export class WeeklyTimeWindowsIterator {
         }).plusMinutes(minutesToAdvance).normalizedStandard();
 
         while (true) {
-            this._cal.date(targetDate.getDays());
-            this._cal.hour(targetDate.getHours());
-            this._cal.minute(targetDate.getMinutes());
-            this._cal.second(0);
             this._cal.millisecond(0);
+            this._cal.second(0);
+            this._cal.minute(targetDate.getMinutes());
+            this._cal.hour(targetDate.getHours());
+            this._cal.date(targetDate.getDays());
 
             if ((this._cal.hour() === targetDate.getHours()) && (this._cal.minute() === targetDate.getMinutes())) {
                 break;
