@@ -208,4 +208,25 @@ describe('WeeklyTimeWindowsIterator', () => {
         expect(status2.until).to.equal(dayAfterTomorrow.valueOf());
     });
     */
+
+    it ('handles consecutive windows', () => {
+        const cal = moment.tz([2010, 12-1, 15, 0, 0, 0, 0], tz);
+
+        const tester = createTester({
+            cal: cal,
+            weekly: [
+                {
+                    minuteOfWeek: WeeklyTimeWindow.SUNDAY,
+                    durationMins: WeeklyTimeWindow.DAY
+                },
+                {
+                    minuteOfWeek: WeeklyTimeWindow.MONDAY,
+                    durationMins: 6 * WeeklyTimeWindow.DAY
+                }
+            ]
+        });
+
+        tester.assertLastStatus(Status.STATUS_AVAILABLE);
+        tester.assertDone();
+    });
 });
