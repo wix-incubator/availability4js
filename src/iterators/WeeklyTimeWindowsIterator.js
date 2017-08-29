@@ -45,7 +45,7 @@ const normalize = weekly => {
 
     let lastTimeWindow = null;
     for (let i = 0; i < weekly.length; ++i) {
-        const timeWindow = weekly[i];
+        const timeWindow = JSON.parse(JSON.stringify(weekly[i]));
         if (lastTimeWindow) {
             if (lastTimeWindow.minuteOfWeek + lastTimeWindow.durationMins === timeWindow.minuteOfWeek) {
                 lastTimeWindow.durationMins += timeWindow.durationMins;

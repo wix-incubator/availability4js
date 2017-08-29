@@ -215,14 +215,14 @@ describe('WeeklyTimeWindowsIterator', () => {
         const tester = createTester({
             cal: cal,
             weekly: [
-                {
+                Object.freeze({
                     minuteOfWeek: WeeklyTimeWindow.SUNDAY,
                     durationMins: WeeklyTimeWindow.DAY
-                },
-                {
+                }),
+                Object.freeze({
                     minuteOfWeek: WeeklyTimeWindow.MONDAY,
                     durationMins: 6 * WeeklyTimeWindow.DAY
-                }
+                })
             ]
         });
 
