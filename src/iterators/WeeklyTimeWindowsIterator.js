@@ -1,8 +1,46 @@
+import {MergingStatusIterator} from './MergingStatusIterator';
 import * as Status from './Status';
-import {Period} from './Period';
 import * as WeeklyTimeWindow from './WeeklyTimeWindow';
+import advanceCalendar from '../utils/advanceCalendar';
 
 export class WeeklyTimeWindowsIterator {
+	/**
+	 * @param weekly   List<WeeklyTimeWindow>
+	 * @param cal      Moment with tz
+	 */
+    constructor({weekly = [], cal}) {
+        weekly = weekly || []; // null weekly is supported, equivalent to empty weekly
+
+        this._it = new MergingStatusIterator({
+            it: new WeeklyTimeWindowsIteratorImpl({
+                weekly,
+                cal
+            })
+        });
+    }
+
+	/** @return Boolean */
+    hasNext() {
+        return this._it.hasNext();
+    }
+
+	/** @return Status */
+    next() {
+        return this._it.next();
+    }
+}
+
+/**
+ * @param cal   Moment with tz
+ * @return Integer
+ */
+const minutesFromStartOfWeek = cal => {
+    return (cal.day() - WeeklyTimeWindow.SUNDAY) * WeeklyTimeWindow.DAY +
+        cal.hour() * WeeklyTimeWindow.HOUR +
+        cal.minute();
+};
+
+class WeeklyTimeWindowsIteratorImpl {
 	/**
 	 * @param weekly   List<WeeklyTimeWindow>
 	 * @param cal      Moment with tz
@@ -80,56 +118,19 @@ export class WeeklyTimeWindowsIterator {
             };
         }
 
-        const minuteOfWeek = this._minutesFromStartOfWeek(this._cal);
+        const minuteOfWeek = minutesFromStartOfWeek(this._cal);
         const currentWindow = this._timeWindows[this._find(minuteOfWeek)];
         let newMinuteOfWeek = this._endMinuteOfWeek(currentWindow);
         if (newMinuteOfWeek === WeeklyTimeWindow.WEEK) {
             newMinuteOfWeek = (this._isFirstAndLastSame ? this._endMinuteOfWeek(this._timeWindows[0]) : 0);
         }
 
-        newMinuteOfWeek = this._advanceCalendar(minuteOfWeek, newMinuteOfWeek);
+        advanceCalendar(this._cal, newMinuteOfWeek);
         return {
             status : currentWindow.status,
             until: this._cal.valueOf()
         };
     }
-
-	/**
-	 * @param oldMinuteOfWeek   Integer
-	 * @param newMinuteOfWeek   Integer
-	 * @return Integer
-	 */
-    _advanceCalendar(oldMinuteOfWeek, newMinuteOfWeek) {
-        let minutesToAdvance = newMinuteOfWeek - oldMinuteOfWeek;
-        if (minutesToAdvance < 0) {
-            minutesToAdvance += WeeklyTimeWindow.WEEK;
-        }
-
-		// The craziness ahead is required to support DST (causing some dates to be invalid)
-        let targetDate = new Period({
-            days : this._cal.date(),
-            hours : this._cal.hour(),
-            minutes : this._cal.minute()
-        }).plusMinutes(minutesToAdvance).normalizedStandard();
-
-        while (true) {
-            this._cal.millisecond(0);
-            this._cal.second(0);
-            this._cal.minute(targetDate.getMinutes());
-            this._cal.hour(targetDate.getHours());
-            this._cal.date(targetDate.getDays());
-
-            if ((this._cal.hour() === targetDate.getHours()) && (this._cal.minute() === targetDate.getMinutes())) {
-                break;
-            }
-
-            targetDate = targetDate.plusMinutes(1).normalizedStandard();
-            ++newMinuteOfWeek;
-        }
-
-        return newMinuteOfWeek;
-    }
-
 
 	/**
 	 * @param minuteOfWeek   Integer
@@ -151,15 +152,5 @@ export class WeeklyTimeWindowsIterator {
         }
 
         return low;
-    }
-
-	/**
-	 * @param cal   Moment with tz
-	 * @return Integer
-	 */
-    _minutesFromStartOfWeek(cal) {
-        return (cal.day() - WeeklyTimeWindow.SUNDAY) * WeeklyTimeWindow.DAY +
-			cal.hour() * WeeklyTimeWindow.HOUR +
-			cal.minute();
     }
 }
