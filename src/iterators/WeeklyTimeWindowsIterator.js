@@ -40,13 +40,37 @@ const minutesFromStartOfWeek = cal => {
         cal.minute();
 };
 
+const normalize = weekly => {
+    const normalized = [];
+
+    let lastTimeWindow = null;
+    for (let i = 0; i < weekly.length; ++i) {
+        const timeWindow = weekly[i];
+        if (lastTimeWindow) {
+            if (lastTimeWindow.minuteOfWeek + lastTimeWindow.durationMins === timeWindow.minuteOfWeek) {
+                lastTimeWindow.durationMins += timeWindow.durationMins;
+            } else {
+                normalized.push(lastTimeWindow);
+                lastTimeWindow = timeWindow;
+            }
+        } else {
+            lastTimeWindow = timeWindow;
+        }
+    }
+    if (lastTimeWindow) {
+        normalized.push(lastTimeWindow);
+    }
+
+    return normalized;
+};
+
 class WeeklyTimeWindowsIteratorImpl {
 	/**
 	 * @param weekly   List<WeeklyTimeWindow>
 	 * @param cal      Moment with tz
 	 */
     constructor({weekly = [], cal}) {
-        weekly = weekly || []; // null weekly is supported, equivalent to empty weekly
+        weekly = normalize(weekly || []); // null weekly is supported, equivalent to empty weekly
 
         this._cal = cal.clone(); // "cal" is modified later, this allows the caller to reuse his version of it
 
