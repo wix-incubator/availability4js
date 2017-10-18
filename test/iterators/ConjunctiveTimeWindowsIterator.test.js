@@ -222,4 +222,36 @@ describe('ConjunctiveTimeWindowsIterator', () => {
             expect(next.status).to.equal('available');
         }
     });
+
+    it.skip('Test for a simple configuration that takes a long time to calculate', () => {
+        const openTimes = {
+            weekly: [
+                {minuteOfWeek: 705, durationMins:675},
+                {minuteOfWeek: 2145, durationMins: 675},
+                {minuteOfWeek: 3585, durationMins: 675},
+                {minuteOfWeek: 5025, durationMins: 675},
+                {minuteOfWeek: 6465, durationMins: 675}
+            ],
+            exceptions: []
+        };
+        const deliveryAreaTimes = {
+            weekly: [
+                {minuteOfWeek:5880, durationMins:15}
+            ]
+        };
+        const cal = moment();
+
+        const start = new Date().getTime();
+
+        const it = new ConjunctiveTimeWindowsIterator({
+            iterators: [deliveryAreaTimes, openTimes].map(availability => new AvailabilityIterator({availability, cal:cal})),
+            cal: cal
+        });
+
+        it.next();
+
+        const end = new Date().getTime();
+
+        expect(end - start).to.be.below(100);
+    });
 });
