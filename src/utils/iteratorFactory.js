@@ -1,5 +1,6 @@
 import {AvailabilityIterator, DisjunctiveTimeWindowsIterator, ConjunctiveTimeWindowsIterator} from '../index';
 import isAvailabilityObject from './isAvailabilityObject';
+import _ from 'lodash';
 
 export function iter(availability) {
     if (!isAvailabilityObject(availability))
@@ -40,15 +41,17 @@ export function conjunct() {
 }
 
 function toIterators(objects, cal) {
-    return objects.map(obj => {
-        if (typeof obj === 'function')
-            return obj(cal);
 
-        if (isAvailabilityObject(obj))
-            return iter(obj)(cal);
-
-        throw 'cannot compose unknown object';
+    const objectsByType = _.groupBy(objects, obj => {
+        if (typeof obj === 'function') return 'function';
+        if (isAvailabilityObject(obj)) return 'availability';
+        throw new Error('cannot compose unknown object');
     });
+
+    return _.union(
+        _(objectsByType['function']).map(f => f(cal)).value(),
+        _(objectsByType['availability']).uniqWith(_.isEqual).map(a => iter(a)(cal)).value()
+    );
 }
 
 function normalizeArgs(a) {

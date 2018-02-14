@@ -108,8 +108,9 @@ describe('iteratorFactory', () => {
 
     it('can disjunct availability objects directly', () => {
         //Given
-        const availability = {weekly: [{}]};
-        const getIter = disjunct(availability, availability);
+        const availability1 = {weekly: [{minuteOfWeek:0, durationMins:10}]};
+        const availability2 = {weekly: [{minuteOfWeek:10, durationMins:10}]};
+        const getIter = disjunct(availability1, availability2);
 
         const cal = '2016-04-3';
 
@@ -123,19 +124,20 @@ describe('iteratorFactory', () => {
             iterators: [{
                 type: 'AvailabilityIterator',
                 cal,
-                availability
+                availability: availability1
             }, {
                 type: 'AvailabilityIterator',
                 cal,
-                availability
+                availability: availability2
             }]
         });
     });
 
     it('can conjunct availability objects directly', () => {
         //Given
-        const availability = {weekly: [{}]};
-        const getIter = conjunct(availability, availability);
+        const availability1 = {weekly: [{minuteOfWeek:0, durationMins:10}]};
+        const availability2 = {weekly: [{minuteOfWeek:10, durationMins:10}]};
+        const getIter = conjunct(availability1, availability2);
 
         const cal = '2016-04-3';
 
@@ -149,11 +151,34 @@ describe('iteratorFactory', () => {
             iterators: [{
                 type: 'AvailabilityIterator',
                 cal,
-                availability
+                availability: availability1
             }, {
                 type: 'AvailabilityIterator',
                 cal,
-                availability
+                availability: availability2
+            }]
+        });
+    });
+
+    it('joins same availability objects', () => {
+        //Given
+        const availability1 = {weekly: [{minuteOfWeek:0, durationMins:10}]};
+        const availability2 = {weekly: [{minuteOfWeek:0, durationMins:10}]};
+        const getIter = disjunct(availability1, availability2);
+
+        const cal = '2016-04-3';
+
+        //When
+        const composedIter = getIter(cal);
+
+        //Then
+        assert.deepEqual(composedIter, {
+            type: 'DisjunctiveIterator',
+            cal,
+            iterators: [{
+                type: 'AvailabilityIterator',
+                cal,
+                availability: availability1
             }]
         });
     });
