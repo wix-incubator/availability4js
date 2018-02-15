@@ -6,7 +6,6 @@ const getMillisOfMinute = cal => cal.second() * 1000 + cal.millisecond();
 
 const getMinuteOfWeek = cal => cal.day() * DAY + cal.hour() * HOUR + cal.minute();
 
-const isConsecutive = (minuteOfWeek1, minuteOfWeek2) => (minuteOfWeek1 + 1 - minuteOfWeek2) % WEEK === 0;
 
 const advanceCalendar = (cal, toMinuteOfWeek) => {
     const millisOfMinute = getMillisOfMinute(cal);
@@ -29,13 +28,17 @@ const advanceCalendar = (cal, toMinuteOfWeek) => {
     cal.add(-minutesToAdvance, 'minute');
 
     // Optimism failed, find that DST change moment
-    for (let i = 0; i < minutesToAdvance; ++i) {
-        const previousMinuteOfWeek = currentMinuteOfWeek;
-        cal.add(1, 'minute');
-        currentMinuteOfWeek = getMinuteOfWeek(cal);
-        if (!isConsecutive(previousMinuteOfWeek, currentMinuteOfWeek)) {
-            break;
-        }
+    advanceCalendarToClosestDstState(cal, !cal.isDST(), minutesToAdvance);
+};
+
+const advanceCalendarToClosestDstState = (cal, targetDstState, step) => {
+    while (cal.isDST() !== targetDstState) {
+        cal.add(step, 'minute');
+    }
+    if (step > 1) {
+        cal.add(-step, 'minute');
+
+        advanceCalendarToClosestDstState(cal, targetDstState, Math.floor(step / 2));
     }
 };
 
