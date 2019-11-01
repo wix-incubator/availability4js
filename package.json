@@ -46,7 +46,7 @@
     "babel-preset-stage-2": "^6.18.0",
     "babel-register": "^6.18.0",
     "chai": "^3.5.0",
-    "eslint": "^3.11.1",
+    "eslint": "^6.6.0",
     "mocha": "^3.0.2",
     "proxyquire": "^1.7.11"
   },
