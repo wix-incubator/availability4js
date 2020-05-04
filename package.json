@@ -8,9 +8,10 @@
     "lint": "eslint ./src ./test",
     "posttest": "npm run lint",
     "compile": "babel -d dist/ src/",
-    "prepublish": "npm test && npm run compile",
+    "prepublish": "npm run snyk-protect && npm test && npm run compile",
     "build": ":",
-    "release": "npm install wnpm-ci --no-save && wnpm-release -- --no-shrinkwrap"
+    "release": "npm install wnpm-ci --no-save && wnpm-release -- --no-shrinkwrap",
+    "snyk-protect": "snyk protect"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,8 @@
     "interval-utils": "^1.0.3",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
-    "moment-timezone": "^0.5.9"
+    "moment-timezone": "^0.5.9",
+    "snyk": "^1.317.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -55,5 +57,6 @@
   },
   "directories": {
     "test": "test"
-  }
+  },
+  "snyk": true
 }
